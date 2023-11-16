@@ -1,4 +1,4 @@
-package enums;
+package ftn.sep.enums;
 
 public enum PaymentType {
     CC,

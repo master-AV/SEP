@@ -1,6 +1,6 @@
-package classes;
+package ftn.sep.classes;
 
-import enums.OfferType;
+import ftn.sep.enums.OfferType;
 import lombok.Getter;
 import lombok.Setter;
 

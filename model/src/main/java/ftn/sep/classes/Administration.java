@@ -1,7 +1,7 @@
-package classes;
+package ftn.sep.classes;
 
-import enums.AdministrationLevel;
-import enums.PaymentType;
+import ftn.sep.enums.AdministrationLevel;
+import ftn.sep.enums.PaymentType;
 import lombok.Getter;
 import lombok.Setter;
 

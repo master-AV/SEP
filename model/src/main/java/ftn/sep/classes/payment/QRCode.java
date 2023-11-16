@@ -1,4 +1,4 @@
-package classes.payment;
+package ftn.sep.classes.payment;
 
 import lombok.Getter;
 import lombok.Setter;

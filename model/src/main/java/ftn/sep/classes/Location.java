@@ -1,4 +1,4 @@
-package classes;
+package ftn.sep.classes;
 
 import lombok.Getter;
 import lombok.Setter;
