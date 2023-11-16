@@ -2,8 +2,10 @@ package ftn.sep.webshop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ftn.sep.classes.Location;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 @SpringBootApplication
+@EntityScan(basePackages = {"ftn.sep.db"})
 public class WebShopApplication {
 
 	public static void main(String[] args) {
