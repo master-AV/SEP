@@ -1,5 +1,6 @@
 package classes;
 
+import enums.PaymentType;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,5 +1,6 @@
 package classes;
 
+import enums.OfferType;
 import lombok.Getter;
 import lombok.Setter;
 
