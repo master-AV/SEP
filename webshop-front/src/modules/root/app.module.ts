@@ -8,6 +8,7 @@ import { MaterialModule } from '../material/material.module';
 import { RootLayoutComponent } from './pages/root-layout/root-layout.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OffersModule } from '../offers/offers.module';
 
 @NgModule({
   declarations: [
@@ -17,11 +18,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OffersModule,
+    AppRoutingModule
   ],
   exports:[MaterialModule],
   bootstrap: [AppComponent]
