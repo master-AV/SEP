@@ -6,6 +6,7 @@ import { PaymentRequest } from '../../model/payment-request';
 import { PaypalService } from '../../services/paypal-service/paypal.service';
 import { BitcoinService } from '../../services/bitcoin-service/bitcoin.service';
 import { ToastrService } from 'ngx-toastr';
+import {QrCodeService} from "../../services/qr/qr-code.service";
 @Component({
   selector: 'app-choose-credit-card',
   templateUrl: './choose-payment-method.component.html',
@@ -43,26 +44,17 @@ export class ChoosePaymentMethodComponent {
 
   constructor(private readonly fb: FormBuilder, private route: ActivatedRoute,
               private cardService: CreditCardService, private paypalService: PaypalService,
-              private bitcoinService: BitcoinService, private toast: ToastrService) {
+              private bitcoinService: BitcoinService, private toast: ToastrService,
+              private qrService: QrCodeService) {
 
   }
 
   creditCardPayment() {
     this.cardService.toPaymentMethod(this.id).subscribe(response => {
-      console.log(response)
-      console.log("********************************************")
-      // console.log(response.headers)
-      // console.log(response.headers.get('Location'))
       window.location.href = response.headers.get('Location')
 
     });
   }
-// =======
-//   constructor(private route: ActivatedRoute, private paypalService: PaypalService, private bitcoinService: BitcoinService, private toast: ToastrService) {
-//     this.route.queryParams.subscribe(params => {
-//       this.id = params['id'];
-//     });
-//   }
 
   clickOnPayment(methodName: string){
     const paymentRequest: PaymentRequest = {
@@ -79,6 +71,9 @@ export class ChoosePaymentMethodComponent {
         break;
       case "CREDIT CARD":
         this.creditCardPayment();
+        break;
+      case "QR CODE":
+        this.qrCodePayment();
         break;
     }
   }
@@ -101,6 +96,14 @@ export class ChoosePaymentMethodComponent {
   bitcoinPayment(paymentRequest: PaymentRequest) {
 
     this.bitcoinService.bitcoinPayment(paymentRequest).subscribe(
+      response => {
+        this.toast.info(response.message);
+      }
+    )
+  }
+
+  private qrCodePayment() {
+    this.qrService.qrCodePayment().subscribe(
       response => {
         this.toast.info(response.message);
       }

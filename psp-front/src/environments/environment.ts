@@ -7,7 +7,8 @@ export const environment = {
   apiUrl: 'http://localhost:8443',
   ccUrl: 'http://localhost:8088',
   paypalApiUrl: 'http://localhost:8083',
-  bitcoinApiUrl: 'http://localhost:8084'
+  bitcoinApiUrl: 'http://localhost:8084',
+  qrApiUrl: 'http://localhost:8085'
 };
 
 /*

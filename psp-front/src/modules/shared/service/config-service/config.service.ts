@@ -16,4 +16,7 @@ export class ConfigService {
   BITCOIN_API_URL = environment.bitcoinApiUrl;
   BITCOIN_URL = `${this.BITCOIN_API_URL}/bitcoin`;
 
+  ///QR
+  QR_API_URL = environment.qrApiUrl;
+  QR_URL = `${this.QR_API_URL}/qr`;
 }

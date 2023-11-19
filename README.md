@@ -4,6 +4,7 @@
 8082 - PCC
 8083 - paypal
 8084 - bitcoin
+8085 - QR
 8088 - CC
 8443 - psp
 
