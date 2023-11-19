@@ -7,4 +7,6 @@ import java.util.List;
 public interface IOfferService {
     List<OfferResponse> getAllOffers();
 
+    OfferResponse getById(Long id);
+
 }

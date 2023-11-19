@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PaymentRequest } from '../../model/payment-request';
+import { PaypalService } from '../../services/paypal-service/paypal.service';
+import { BitcoinService } from '../../services/bitcoin-service/bitcoin.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-choose-payment-method',
@@ -6,6 +11,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./choose-payment-method.component.scss']
 })
 export class ChoosePaymentMethodComponent {
+  id: number;
 
   paymentMethods = [
     {
@@ -25,4 +31,43 @@ export class ChoosePaymentMethodComponent {
       img: './assets/bitcoin.png'
     }
   ];
+
+  constructor(private route: ActivatedRoute, private paypalService: PaypalService, private bitcoinService: BitcoinService, private toast: ToastrService) {
+    this.route.queryParams.subscribe(params => {
+      this.id = params['id'];
+    });
+  }
+
+  clickOnPayment(methodName: string){
+    const paymentRequest: PaymentRequest = {
+      userId: 1,
+      offerId: this.id
+    };
+
+    switch(methodName){
+      case "PAYPAL":
+        this.paypalPayment(paymentRequest);   
+        break;
+      case "BITCOIN":
+        this.bitcoinPayment(paymentRequest);
+    }
+  }
+
+  paypalPayment(paymentRequest: PaymentRequest) {
+
+    this.paypalService.paypalPayment(paymentRequest).subscribe(
+      response => {
+        console.log(response);
+      }
+    )
+  }
+
+  bitcoinPayment(paymentRequest: PaymentRequest) {
+
+    this.bitcoinService.bitcoinPayment(paymentRequest).subscribe(
+      response => {
+        this.toast.info(response.message);
+      }
+    )
+  }
 }

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:8443'
+  paypalApiUrl: 'http://localhost:8083',
+  bitcoinApiUrl: 'http://localhost:8084'
 };
 
 /*

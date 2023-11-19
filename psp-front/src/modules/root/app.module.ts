@@ -8,6 +8,8 @@ import { MaterialModule } from '../material/material.module';
 import { RootLayoutComponent } from './pages/root-layout/root-layout.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -17,11 +19,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    SharedModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-left',
+      preventDuplicates: true,
+      closeButton: true,
+    }),
   ],
   exports:[MaterialModule],
   bootstrap: [AppComponent]

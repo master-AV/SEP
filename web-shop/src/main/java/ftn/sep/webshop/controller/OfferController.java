@@ -23,4 +23,12 @@ public class OfferController {
 
         return offerService.getAllOffers();
     }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public OfferResponse getById(@PathVariable Long id) {
+
+        return offerService.getById(id);
+    }
+
 }
