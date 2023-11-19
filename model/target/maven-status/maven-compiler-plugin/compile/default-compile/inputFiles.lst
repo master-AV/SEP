@@ -1,0 +1,17 @@
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/enums/OfferType.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/payment/Bitcoin.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/payment/CreditCard.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/PSPClient.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/Location.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/db/Address.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/enums/PaymentType.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/util/Constants.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/payment/PayPal.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/enums/AdministrationLevel.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/Administration.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/db/Offer.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/dto/request/CreatePaymentRequest.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/db/Transaction.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/dto/response/OfferResponse.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/db/User.java
+/Users/anastasijasamcovic/Desktop/ftn/master/sep/sep-projekat/model/src/main/java/ftn/sep/classes/payment/QRCode.java

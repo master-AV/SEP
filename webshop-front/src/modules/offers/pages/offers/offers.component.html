@@ -1,0 +1,8 @@
+<div *ngIf="offers.length > 0">
+    <p class="title">USLUGE</p>
+    <div class="offers">
+    <div *ngFor="let offer of offers; let i=index"  style="margin-left:2rem">
+        <app-offer [offer]="offer" [index]="i" ></app-offer>
+    </div>
+    </div>
+</div>
