@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("offers")
-@CrossOrigin(origins = "http://localhost:4200/") //ali ovo nije resenje!!
+//@CrossOrigin(origins = "http://localhost:4200/") //ali ovo nije resenje!!
 public class OfferController {
 
     @Autowired
@@ -22,5 +22,12 @@ public class OfferController {
     public List<OfferResponse> getAllOffers(){
 
         return offerService.getAllOffers();
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public double getOfferPriceById(@PathVariable int id){
+        System.out.println(offerService.getOfferPriceById(id));
+        return offerService.getOfferPriceById(id);
     }
 }

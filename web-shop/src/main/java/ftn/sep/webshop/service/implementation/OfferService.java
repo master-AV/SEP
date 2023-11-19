@@ -20,4 +20,9 @@ public class OfferService implements IOfferService {
 
         return formOfferResponses(offerRepository.findAll());
     }
+
+    @Override
+    public double getOfferPriceById(int id) {
+        return offerRepository.findOfferPriceById(id);
+    }
 }

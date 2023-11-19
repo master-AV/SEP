@@ -7,4 +7,5 @@ import java.util.List;
 public interface IOfferService {
     List<OfferResponse> getAllOffers();
 
+    double getOfferPriceById(int id);
 }

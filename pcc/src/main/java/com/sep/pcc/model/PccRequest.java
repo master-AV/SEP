@@ -20,14 +20,14 @@ public class PccRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String PAN;
+    private String paymentId;
     private long acquirerOrderId;//ACQUIRER_ORDER_ID
     private LocalDateTime acquirerTimestamp;//ACQUIRER_TIMESTAMP
     private long issuerOrderId;
     private LocalDateTime issuerTimestamp;
 
-    public PccRequest(String pan, long acquirerOrderId, LocalDateTime acquirerTimestamp) {
-        this.PAN = pan;
+    public PccRequest(String paymentId, long acquirerOrderId, LocalDateTime acquirerTimestamp) {
+        this.paymentId = paymentId;
         this.acquirerOrderId = acquirerOrderId;
         this.acquirerTimestamp = acquirerTimestamp;
     }

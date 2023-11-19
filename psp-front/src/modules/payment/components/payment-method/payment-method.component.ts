@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {CreditCardService} from "../../services/credit-card/credit-card.service";
 
 @Component({
   selector: 'app-payment-method',
@@ -6,11 +7,19 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./payment-method.component.scss']
 })
 export class PaymentMethodComponent implements OnInit{
-  
+
   @Input() nameOfMethod: string;
   @Input() imgOfMethod: string;
-  
+
+  constructor(private paymentMethodService: CreditCardService) {
+  }
+
   ngOnInit(): void {
-  
+
+  }
+
+  callPSP() {
+    console.log("SHOULD CALL")
+
   }
 }

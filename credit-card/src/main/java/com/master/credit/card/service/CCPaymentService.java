@@ -48,17 +48,17 @@ public class CCPaymentService {
 
             ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, WebshopInformation.class);
             HttpHeaders httpHeaders = result.getHeaders();
-            System.out.println(httpHeaders.getFirst("PaymentUrl"));
-            System.out.println(httpHeaders.getFirst("PaymentId"));
-            System.out.println(httpHeaders.getFirst("ErrorUrl"));
-            System.out.println(httpHeaders.getFirst("FailedUrl"));
+//            System.out.println(httpHeaders.getFirst("PaymentUrl"));
+//            System.out.println(httpHeaders.getFirst("PaymentId"));
+//            System.out.println(httpHeaders.getFirst("ErrorUrl"));
+//            System.out.println(httpHeaders.getFirst("FailedUrl"));
             PaymentInfo p = new PaymentInfo();
             if (httpHeaders.getFirst("ErrorUrl") != null)
                 p.setRedirectUrl(httpHeaders.getFirst("ErrorUrl"));
             else if (httpHeaders.getFirst("FailedUrl") != null)
                 p.setRedirectUrl(httpHeaders.getFirst("FailedUrl"));
             else {
-                p.setPaymentId(httpHeaders.getFirst("PaymentUrl"));
+                p.setRedirectUrl(httpHeaders.getFirst("PaymentUrl"));
                 p.setPaymentId(httpHeaders.getFirst("PaymentId"));
             }
             return p;
@@ -69,14 +69,14 @@ public class CCPaymentService {
         }
     }
 
-    public void startPaymentWithCC(CardDTO cardInfo) {
+    public ResponseEntity<?> startPaymentWithCC(CardDTO cardInfo) {
         // 3
         try {
             URL url = new URL(bankUrl + "start/payment");
 
             HttpEntity<CardDTO> request = new HttpEntity<>(cardInfo);
-            ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, CardDTO.class);
-            HttpHeaders httpHeaders = result.getHeaders();
+            return restTemplate.postForEntity(url.toURI(), request, CardDTO.class);
+//            HttpHeaders httpHeaders = result.getHeaders();
 
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);

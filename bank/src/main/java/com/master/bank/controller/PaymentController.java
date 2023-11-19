@@ -5,6 +5,8 @@ import com.master.bank.service.PaymentService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +35,21 @@ public class PaymentController {
         }
     }
     @PostMapping(value = "/start/payment")
+    @CrossOrigin(exposedHeaders = {"Location"})
     public ResponseEntity<?> payWithCC(@RequestBody CardDTO cardDTO){
-        System.out.println("START PAYMENT");
-        paymentService.startPayment(cardDTO, false);
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            System.out.println("START PAYMENT");
+            EndPaymentDTO endPaymentDTO = paymentService.startPayment(cardDTO, false);
+            switch (endPaymentDTO.getTransactionState()) {
+                case FAILED -> headers.add("Location", environment.getProperty("bank.url.failed"));
+                case SUCCESSFUL -> headers.add("Location", environment.getProperty("bank.url.success.pay"));
+                default -> headers.add("Location", environment.getProperty("bank.url.error"));
+            }
+        }catch (Exception e){
+            headers.add("Location", environment.getProperty("bank.url.error"));
+        }
+        return new ResponseEntity<>("", headers, HttpStatus.OK);
     }
 
     @PostMapping(value = "/pcc/req")

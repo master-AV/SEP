@@ -12,8 +12,24 @@ const routes: Routes = [
         loadChildren: () =>
           import("./../payment/payment.module").then((m) => m.PaymentModule),
       },
+      {
+        path: "cc",
+        loadChildren: () =>
+          import("./../credit-card/credit-card.module").then((m) => m.CreditCardModule),
+      },
     ]
   },
+  // {
+  //   path: 'cc',
+  //   component: RootLayoutComponent,
+  //   children: [
+  //     {
+  //       path: "",
+  //       loadChildren: () =>
+  //         import("./../credit-card/credit-card.module").then((m) => m.CreditCardModule),
+  //     },
+  //   ]
+  // },
 ];
 
 @NgModule({

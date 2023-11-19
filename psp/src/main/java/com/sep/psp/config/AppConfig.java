@@ -1,4 +1,4 @@
-package ftn.sep.webshop.config;
+package com.sep.psp.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,7 +13,7 @@ public class AppConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         System.out.println("TU SAM");
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200","http://localhost:4201")
+                .allowedOrigins("http://localhost:4201","http://localhost:4201")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true)

@@ -88,20 +88,20 @@ public class PaymentService {
         return environment.getProperty("bank.url.success");//this.basicURL + "payment/cc";
     }
 
-    public void startPayment(CardDTO cardDTO, boolean pccRequest) {
+    public EndPaymentDTO startPayment(CardDTO cardDTO, boolean pccRequest) {
         if (!this.accountService.checkCardInfoValidity(cardDTO))
             throw new NotValidPaymentException("Payment is not valid");
         Account buyerAccount = accountService.getAccountByPAN(cardDTO.getPAN());
         PaymentInformation paymentInfo = paymentInformationRepository.findByPaymentId(cardDTO.getPaymentId());
         if (buyerAccount.getBankType() == paymentInfo.getBankType()) {//3.a
             TransactionState state = checkAmountOfMoney(buyerAccount, paymentInfo);
-            this.endPayment(paymentInfo, generateIdNumber10(), LocalDateTime.now(), state);
+            return this.endPayment(paymentInfo, generateIdNumber10(), LocalDateTime.now(), state);
         }else if (pccRequest){
             TransactionState state = checkAmountOfMoney(buyerAccount, paymentInfo);
         }
         else //3.b
             sendRequestToPCC(cardDTO);
-
+        return null;
     }
 
     private void sendRequestToPCC(CardDTO cardDTO) {

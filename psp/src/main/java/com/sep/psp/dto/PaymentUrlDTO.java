@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentUrlDTO {
-    private int amount;
+    private double amount;
     private String merchantId;
     private String merchantPassword;
 }

@@ -5,22 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/cc")
+@CrossOrigin("http://localhost:4201")
 public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
 
-    @GetMapping(value = "/pay/{amount}")
-    public ResponseEntity<?> startRequestPaymentCC(@PathVariable int amount){
+    @GetMapping(value = "/payment/{serviceId}")
+    @CrossOrigin(exposedHeaders = {"Location"})
+    public ResponseEntity<?> startRequestPaymentCC(@PathVariable int serviceId){
         System.out.println("Pay");
-        return paymentService.startPayment(amount);
+        ResponseEntity<?> res = paymentService.startPayment(serviceId);
+//        System.out.println(res.getHeaders().getFirst("Location"));
+//        System.out.println(res.getHeaders());
+        return res;
     }
 
 }

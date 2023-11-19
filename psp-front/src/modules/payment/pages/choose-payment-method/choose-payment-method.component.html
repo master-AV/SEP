@@ -1,6 +1,6 @@
 <p class="title">Choose a payment method</p>
 <div class="center">
-    <div *ngFor="let method of paymentMethods" class="margin-left">
+    <div *ngFor="let method of paymentMethods" class="margin-left"  (click)="clickOnPayment(method.name)">
         <app-payment-method [nameOfMethod]="method.name" [imgOfMethod]="method.img"></app-payment-method>
     </div>
 </div>
