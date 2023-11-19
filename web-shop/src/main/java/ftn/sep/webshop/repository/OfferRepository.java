@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
 
-
     @Query("select o.monthlyPrice from Offer o where o.id = ?1")
     double findOfferPriceById(int id);
+    Optional<Offer> findById(Long id);
 }

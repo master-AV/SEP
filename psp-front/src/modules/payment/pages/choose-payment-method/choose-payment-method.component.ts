@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {CreditCardService} from "../../services/credit-card/credit-card.service";
-
+import { PaymentRequest } from '../../model/payment-request';
+import { PaypalService } from '../../services/paypal-service/paypal.service';
+import { BitcoinService } from '../../services/bitcoin-service/bitcoin.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-choose-credit-card',
   templateUrl: './choose-payment-method.component.html',
@@ -38,24 +41,14 @@ export class ChoosePaymentMethodComponent {
     });
   }
 
-  constructor(private readonly fb: FormBuilder,
-              private route: ActivatedRoute,
-              private cardService: CreditCardService) {
+  constructor(private readonly fb: FormBuilder, private route: ActivatedRoute,
+              private cardService: CreditCardService, private paypalService: PaypalService,
+              private bitcoinService: BitcoinService, private toast: ToastrService) {
 
   }
-
-  clickOnPayment(methodName: string){
-
-    switch(methodName){
-      case "CREDIT CARD":
-        this.creditCardPayment();
-        break;
-    }
-  }
-
 
   creditCardPayment() {
-    this.cardService.toPaymentMethod(this.id).subscribe(response =>{
+    this.cardService.toPaymentMethod(this.id).subscribe(response => {
       console.log(response)
       console.log("********************************************")
       // console.log(response.headers)
@@ -63,5 +56,54 @@ export class ChoosePaymentMethodComponent {
       window.location.href = response.headers.get('Location')
 
     });
+  }
+// =======
+//   constructor(private route: ActivatedRoute, private paypalService: PaypalService, private bitcoinService: BitcoinService, private toast: ToastrService) {
+//     this.route.queryParams.subscribe(params => {
+//       this.id = params['id'];
+//     });
+//   }
+
+  clickOnPayment(methodName: string){
+    const paymentRequest: PaymentRequest = {
+      userId: 1,
+      offerId: this.id
+    };
+
+    switch(methodName){
+      case "PAYPAL":
+        this.paypalPayment(paymentRequest);
+        break;
+      case "BITCOIN":
+        this.bitcoinPayment(paymentRequest);
+        break;
+      case "CREDIT CARD":
+        this.creditCardPayment();
+        break;
+    }
+  }
+
+  paypalPayment(paymentRequest: PaymentRequest) {
+
+    this.paypalService.paypalPayment(paymentRequest).subscribe(
+      response => {
+          window.location.href = response.redirectUrl;
+        },
+      error => {
+        this.toast.error(
+          error.error,
+          'Payment creation failed!'
+        );
+      }
+    )
+  }
+
+  bitcoinPayment(paymentRequest: PaymentRequest) {
+
+    this.bitcoinService.bitcoinPayment(paymentRequest).subscribe(
+      response => {
+        this.toast.info(response.message);
+      }
+    )
   }
 }

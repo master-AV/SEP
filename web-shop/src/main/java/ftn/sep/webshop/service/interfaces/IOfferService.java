@@ -8,4 +8,6 @@ public interface IOfferService {
     List<OfferResponse> getAllOffers();
 
     double getOfferPriceById(int id);
+    OfferResponse getById(Long id);
+
 }

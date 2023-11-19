@@ -24,10 +24,17 @@ public class OfferController {
         return offerService.getAllOffers();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/price/{id}")
     @ResponseStatus(HttpStatus.OK)
     public double getOfferPriceById(@PathVariable int id){
         System.out.println(offerService.getOfferPriceById(id));
         return offerService.getOfferPriceById(id);
     }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public OfferResponse getById(@PathVariable Long id) {
+
+        return offerService.getById(id);
+    }
+
 }

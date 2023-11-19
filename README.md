@@ -1,2 +1,11 @@
 # SEP
-eee
+8080 - webshop
+8081 - bank
+8082 - PCC
+8083 - paypal
+8084 - bitcoin
+8088 - CC
+8443 - psp
+
+4200 - webshop front
+4201 - psp front

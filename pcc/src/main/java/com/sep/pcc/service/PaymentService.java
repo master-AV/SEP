@@ -37,7 +37,7 @@ public class PaymentService {
         PccRequest req = new PccRequest(requestDTO.getCardDTO().getPAN(), requestDTO.getAcquirerOrderId(), requestDTO.getAcquirerTimestamp());
         pccRequestRepository.save(req);
         try {
-            URL url = new URL(bankUrl + "pcc/req");
+                URL url = new URL(bankUrl + "pcc/req");
 
             HttpEntity<PccRequestDTO> request = new HttpEntity<>(requestDTO);
             ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, CardDTO.class);

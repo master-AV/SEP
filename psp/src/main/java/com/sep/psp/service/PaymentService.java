@@ -54,7 +54,7 @@ public class PaymentService {
 
     private double getPriceOfService(int amount) {
         try {
-            URL url = new URL(webshopUrl + "offers/" + amount);
+            URL url = new URL(webshopUrl + "offers/price/" + amount);
 
             return restTemplate.getForObject(url.toURI(), Double.class);
 //            HttpHeaders httpHeaders = result.getHeaders();

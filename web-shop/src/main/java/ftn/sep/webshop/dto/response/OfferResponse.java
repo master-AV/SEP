@@ -2,13 +2,10 @@ package ftn.sep.webshop.dto.response;
 
 import ftn.sep.db.Offer;
 import ftn.sep.enums.OfferType;
-import ftn.sep.webshop.repository.OfferRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
