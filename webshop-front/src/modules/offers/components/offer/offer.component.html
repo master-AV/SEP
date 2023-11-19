@@ -1,0 +1,6 @@
+<div class="method-div">
+    <p class="center text">{{offer.type}}</p>
+    <p class="center">Mesečna pretplata: {{offer.monthlyPrice}}</p>
+    <p class="center">Godišnja pretplata: {{offer.yearlyPrice}}</p>
+    <button mat-raised-button style="background-color: var(--deep-blue); color: var(--white); width: 50%; align-self: center;" (click)="clickOnBuy(offer.id)">KUPI</button>
+</div>
