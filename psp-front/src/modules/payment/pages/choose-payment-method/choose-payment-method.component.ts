@@ -57,7 +57,13 @@ export class ChoosePaymentMethodComponent {
 
     this.paypalService.paypalPayment(paymentRequest).subscribe(
       response => {
-        console.log(response);
+          window.location.href = response.redirectUrl;
+        },
+      error => {
+        this.toast.error(
+          error.error,
+          'Payment creation failed!'
+        );
       }
     )
   }

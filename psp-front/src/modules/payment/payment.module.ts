@@ -6,11 +6,13 @@ import { MaterialModule } from "../material/material.module";
 import { PaymentRoutes } from "./payment.routes";
 import { ChoosePaymentMethodComponent } from './pages/choose-payment-method/choose-payment-method.component';
 import { PaymentMethodComponent } from './components/payment-method/payment-method.component';
+import { SuccessPaypalComponent } from './pages/success-paypal/success-paypal.component';
 
 @NgModule({
   declarations: [
     ChoosePaymentMethodComponent,
-    PaymentMethodComponent
+    PaymentMethodComponent,
+    SuccessPaypalComponent
   ],
   imports: [
     CommonModule,
