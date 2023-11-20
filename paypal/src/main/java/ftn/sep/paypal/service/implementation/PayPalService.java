@@ -86,7 +86,7 @@ public class PayPalService implements IPayPalService {
     private RedirectUrls createRedirectUrls(Long offerId) {
         RedirectUrls redirectUrls = new RedirectUrls();
         redirectUrls.setCancelUrl("http://localhost:4201/psp/payment");
-        redirectUrls.setReturnUrl(String.format("%s/%s/process", "http://localhost:4201/psp/success", offerId));
+        redirectUrls.setReturnUrl("http://localhost:4201/psp/payment/succ");
 
         return redirectUrls;
     }

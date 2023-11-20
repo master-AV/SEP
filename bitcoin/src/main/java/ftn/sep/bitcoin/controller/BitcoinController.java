@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("bitcoin")
-@CrossOrigin("http://localhost:4201")
 public class BitcoinController {
 
     @PostMapping

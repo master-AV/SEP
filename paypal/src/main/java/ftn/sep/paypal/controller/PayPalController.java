@@ -13,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("paypal")
-@CrossOrigin("http://localhost:4201")
 public class PayPalController {
 
     @Autowired
