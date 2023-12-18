@@ -40,7 +40,4 @@ public class PaymentInformation {
         return String.valueOf(randomNumberInRange) + String.valueOf(randomNumberInRange2);
     }
 
-    public BankType getBankType() {
-        return this.account.getBankType();
-    }
 }

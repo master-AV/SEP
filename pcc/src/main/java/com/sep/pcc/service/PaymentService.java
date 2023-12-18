@@ -24,6 +24,8 @@ public class PaymentService {
     @Value("${bank.url}")
     private String bankUrl;
 
+    @Value("${bank2.url}")
+    private String bank2Url;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -37,8 +39,13 @@ public class PaymentService {
         PccRequest req = new PccRequest(requestDTO.getCardDTO().getPAN(), requestDTO.getAcquirerOrderId(), requestDTO.getAcquirerTimestamp());
         pccRequestRepository.save(req);
         try {
-                URL url = new URL(bankUrl + "pcc/req");
-
+            URL url = null;
+            if (requestDTO.getCardDTO().getPAN().charAt(0) == '0')
+                url = new URL(bankUrl + "pcc/req");
+            else
+                url = new URL(bank2Url + "pcc/req");
+            System.out.println("PAN: " + requestDTO.getCardDTO().getPAN());
+            System.out.println("To bank: " + url.toURI());
             HttpEntity<PccRequestDTO> request = new HttpEntity<>(requestDTO);
             ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, CardDTO.class);
             HttpHeaders httpHeaders = result.getHeaders();

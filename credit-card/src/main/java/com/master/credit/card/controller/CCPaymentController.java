@@ -20,26 +20,16 @@ public class CCPaymentController {
     @Autowired
     private CCPaymentService paymentService;
 
-//    @GetMapping(value = "/pay")
     @PostMapping(value = "/req/payment", consumes = "application/json")
     @CrossOrigin(exposedHeaders = {"Location"})
-//    @ResponseStatus(HttpStatus.TEMPORARY_REDIRECT)
     public ResponseEntity<?> requestPaymentURL(@RequestBody PaymentUrlDTO dto,
                                                HttpServletResponse response) throws URISyntaxException {
-
-//        PaymentInfo info = paymentService.requestPaymentURL(dto);
-//        HttpHeaders headers = new HttpHeaders();
-//        response.addHeader("Location", info.getRedirectUrl());
-////        response.setStatus(HttpServletResponse.SC_FOUND);
-////        headers.add
-//        return info.getPaymentId();//, HttpStatus.FOUND);
         PaymentInfo info = paymentService.requestPaymentURL(dto);
         HttpHeaders headers = new HttpHeaders();
         System.out.println(info.getRedirectUrl());
         if (info.getPaymentId() != null) info.setRedirectUrl(info.getRedirectUrl()+ "/" + info.getPaymentId());
         headers.add("Location", info.getRedirectUrl());
         return new ResponseEntity(info.getPaymentId(), headers, HttpStatus.OK);
-//        return ResponseEntity.status(301).location(new URI()).build();
     }
 
     @PostMapping(value = "/pay", consumes = "application/json")
@@ -52,9 +42,5 @@ public class CCPaymentController {
         System.out.println("pay id: " + cardInfo.getPaymentId());
         ResponseEntity<?> res =  paymentService.startPaymentWithCC(cardInfo);
         return res;
-//        return null;
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Location", info.getRedirectUrl());
-//        return new ResponseEntity(info.getPaymentId(), headers, HttpStatus.FOUND);
     }
 }

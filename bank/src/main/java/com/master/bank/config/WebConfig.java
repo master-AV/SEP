@@ -13,13 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
-        //registry.addMapping("/socket").allowedOrigins("https://localhost:4200/");
     }
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry
-//                .addResourceHandler("/resources/**")
-//                .addResourceLocations("file:///" + CreditCardApplication.IMAGE_DIR);
-//    }
 }

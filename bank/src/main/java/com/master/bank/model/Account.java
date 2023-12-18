@@ -24,7 +24,7 @@ public class Account {
     private int reservedMoney;
     private int availableMoney;
 
-    private BankType bankType;
+//    private BankType bankType;
 
     @Override
     public boolean equals(Object o) {
@@ -37,6 +37,6 @@ public class Account {
 
     @Override
     public int hashCode() {
-        return Objects.hash(PAN, securityCode, cardHolderName, expirationDate, bankType);
+        return Objects.hash(PAN, securityCode, cardHolderName, expirationDate);
     }
 }

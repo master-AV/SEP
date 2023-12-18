@@ -1,6 +1,7 @@
 package com.master.bank.service;
 
 import com.master.bank.dto.*;
+import com.master.bank.exception.NonExistentAccountException;
 import com.master.bank.exception.NotValidPaymentException;
 import com.master.bank.exception.NotValidPaymentRequestException;
 import com.master.bank.model.Account;
@@ -89,18 +90,19 @@ public class PaymentService {
     }
 
     public EndPaymentDTO startPayment(CardDTO cardDTO, boolean pccRequest) {
-        if (!this.accountService.checkCardInfoValidity(cardDTO))
-            throw new NotValidPaymentException("Payment is not valid");
-        Account buyerAccount = accountService.getAccountByPAN(cardDTO.getPAN());
-        PaymentInformation paymentInfo = paymentInformationRepository.findByPaymentId(cardDTO.getPaymentId());
-        if (buyerAccount.getBankType() == paymentInfo.getBankType()) {//3.a
+        try {
+            if (!this.accountService.checkCardInfoValidity(cardDTO))
+                throw new NotValidPaymentException("Payment is not valid");
+            Account buyerAccount = accountService.getAccountByPAN(cardDTO.getPAN());
+            PaymentInformation paymentInfo = paymentInformationRepository.findByPaymentId(cardDTO.getPaymentId());
             TransactionState state = checkAmountOfMoney(buyerAccount, paymentInfo);
             return this.endPayment(paymentInfo, generateIdNumber10(), LocalDateTime.now(), state);
-        }else if (pccRequest){
-            TransactionState state = checkAmountOfMoney(buyerAccount, paymentInfo);
-        }
-        else //3.b
+        }catch (NonExistentAccountException existentAccountException){
+
             sendRequestToPCC(cardDTO);
+        }
+//        else //3.b
+//            sendRequestToPCC(cardDTO);
         return null;
     }
 

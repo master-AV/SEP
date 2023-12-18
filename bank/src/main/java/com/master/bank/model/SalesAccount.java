@@ -59,7 +59,4 @@ public class SalesAccount implements UserDetails {
         return true;
     }
 
-    public BankType getBankType() {
-        return this.account.getBankType();
-    }
 }

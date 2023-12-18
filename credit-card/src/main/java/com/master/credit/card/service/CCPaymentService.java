@@ -48,10 +48,6 @@ public class CCPaymentService {
 
             ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, WebshopInformation.class);
             HttpHeaders httpHeaders = result.getHeaders();
-//            System.out.println(httpHeaders.getFirst("PaymentUrl"));
-//            System.out.println(httpHeaders.getFirst("PaymentId"));
-//            System.out.println(httpHeaders.getFirst("ErrorUrl"));
-//            System.out.println(httpHeaders.getFirst("FailedUrl"));
             PaymentInfo p = new PaymentInfo();
             if (httpHeaders.getFirst("ErrorUrl") != null)
                 p.setRedirectUrl(httpHeaders.getFirst("ErrorUrl"));
@@ -76,8 +72,6 @@ public class CCPaymentService {
 
             HttpEntity<CardDTO> request = new HttpEntity<>(cardInfo);
             return restTemplate.postForEntity(url.toURI(), request, CardDTO.class);
-//            HttpHeaders httpHeaders = result.getHeaders();
-
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) { // toURI()
