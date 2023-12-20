@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: psp
+          uri: lb://psp
+          #localhost:8443/
+          predicates:
+            - Path=/cc/** #http://localhost:8443/
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8089/eureka/
+#  main:
+#    web-application-type: reactive
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8089/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance.instance-id: localhost:${server.port}/
+
+
+logging:
+  level:
+    org.springframework.web.HttpLogging: TRACE
+    reactor.netty.http.server: DEBUG
+    reactor.netty.http.client: DEBUG
+
+jwt:
+  secret: VHKJMNnbfhbsjkdbVJHVkhbJBKJBsmfnbngygiyguFYVHJbkjnjnsjdnlkfn
+
+server:
+  port: 8091
+
+authentication:
+  enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: httptrace
+#  httpexchanges:
+#    recording:
+#      enabled: true

@@ -6,7 +6,9 @@
 8084 - bitcoin
 8085 - QR
 8088 - CC
+8089 - service registry
 8090 - bank 2
+8091 - api
 8443 - psp
 
 4200 - webshop front

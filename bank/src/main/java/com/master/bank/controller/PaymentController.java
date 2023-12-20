@@ -20,6 +20,10 @@ public class PaymentController {
     @Autowired
     private Environment environment;
 
+    @GetMapping(value = "/hi")
+    public void hiFunc() {
+        System.out.println("HEEEEY FROM API gateway");
+    }
     @PostMapping(value = "/request")
     public ResponseEntity<?> requestPaymentCC(@RequestBody PaymentURLRequestDTO requestDTO,
                                        HttpServletResponse response){

@@ -8,12 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/cc")
+@RequestMapping(value = "/cc") // TODO: CHANGE
 @CrossOrigin("http://localhost:4201")
 public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
+
+
+    @GetMapping(value = "/hi")
+    public void hiFunc() {
+        System.out.println("HEEEEY FROM API gateway");
+    }
 
     @GetMapping(value = "/payment/{serviceId}")
     @CrossOrigin(exposedHeaders = {"Location"})
