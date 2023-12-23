@@ -11,7 +11,6 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        System.out.println("TU SAM");
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:4201","http://localhost:4201")
                 .allowedMethods("*")

@@ -1,4 +1,4 @@
-package com.sep.psp.model;
+package ftn.sep.db;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
