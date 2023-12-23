@@ -49,8 +49,8 @@ public class User {
     protected Integer failedAttempts;
 
     public User(){
-        this.verified = false;
-        lockedUntil = null;
-        failedAttempts = 0;
+        this.verified = true; //change after testing
+        this.lockedUntil = null;
+        this.failedAttempts = 0;
     }
 }

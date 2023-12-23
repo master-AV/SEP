@@ -119,12 +119,12 @@ public class AuthService {
         User user = new User();
         user.setEmail(userRequest.getEmail());
         user.setName(userRequest.getName());
-        user.setPassword(userRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setSurname(userRequest.getSurname());
         user.setRole(roleRepository.findById(1L).orElseThrow(()->new NotFoundException("Role not found")));
         /*user.setEmail("new.user@email.com");
         user.setVerified(true);
-        user.setPassword(passwordEncoder.encode("aA1*aA1*aA1*"));
+        user.setPassword(paA1*aA1*aA1*"));
         Role role = new Role();
         role.setId(1L);
         role.setRoleName("ROLE_USER");
