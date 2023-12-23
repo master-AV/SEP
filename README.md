@@ -9,6 +9,7 @@
 8089 - service registry
 8090 - bank 2
 8091 - api
+8092 - id
 8443 - psp
 
 4200 - webshop front

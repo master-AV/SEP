@@ -16,11 +16,11 @@ public class HttpTraceActuatorConfiguration {
         return new InMemoryHttpExchangeRepository();
     }
 
-    @Bean
+    /*@Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder) {
         RouteLocator r = builder.routes().build();
         System.out.println(r.getRoutes());
         return r;
-    }
+    }*/
 
 }

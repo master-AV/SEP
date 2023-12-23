@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
       withCredentials: true,
       setHeaders: {
         "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "application/json"
       }
     });
     return next.handle(request);

@@ -11,6 +11,11 @@ const routes: Routes = [
         path: "offers",
         loadChildren: () =>
           import("./../offers/offers.module").then((m) => m.OffersModule),
+      },
+      {
+        path: "auth",
+        loadChildren: () =>
+          import("./../auth/auth.module").then((m) => m.AuthModule),
       }
     ]
   },
