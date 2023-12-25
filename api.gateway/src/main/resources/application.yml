@@ -8,6 +8,8 @@ spring:
       org.springframework.cloud.gateway: DEBUG
   cloud:
     gateway:
+      config:
+
       globalcors:
         cors-configurations:
           '[/**]':

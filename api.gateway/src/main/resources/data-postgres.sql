@@ -8,5 +8,5 @@ insert into offer (offer_type, monthly_price, yearly_price) values
 insert into role(role_name) values ('ROLE_USER');  -- 1
 insert into role(role_name) values ('ROLE_ADMIN');   -- 2
 
-insert into users (name, surname, email, verified, password, role_id) values
-    ('Ana', 'Anic', 'ana@gmail.com', true, '$2y$10$uwgoYpON2hx80Xpfgn4.O.j0Pys.uATCE2gQu3BNr/DwC8qn6G9am', 1);
+insert into users (name, surname, email, verified, password, role_id, expires_membership) values
+    ('Ana', 'Anic', 'ana@gmail.com', true, '$2y$10$uwgoYpON2hx80Xpfgn4.O.j0Pys.uATCE2gQu3BNr/DwC8qn6G9am', 1, null);

@@ -12,5 +12,6 @@ export interface User {
   password: string;
   confirmPassword?: string;
   role: Role;
+  expiresMembership: Date;
 }
  

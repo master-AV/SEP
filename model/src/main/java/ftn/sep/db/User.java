@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name="users")
@@ -31,6 +33,8 @@ public class User {
     @OneToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
+    @Column(name="expires_membership")
+    private LocalDateTime expiresMembership;
 
     public User(String name, String surname, String email, boolean verified, String password, Role role) {
         this.name = name;
@@ -39,5 +43,6 @@ public class User {
         this.verified = verified;
         this.password = password;
         this.role = role;
+        this.expiresMembership = null;
     }
 }

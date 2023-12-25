@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +18,7 @@ public class UserResponse {
     private String name;
     private String surname;
     private Role role;
+    private LocalDateTime expiresMembership;
 
     public UserResponse(Long id, String email, String password, String name, String surname, Role role) {
         this.id = id;
@@ -32,5 +35,6 @@ public class UserResponse {
         this.password = user.getPassword();
         this.name = user.getName();
         this.role = user.getRole();
+        this.expiresMembership = user.getExpiresMembership();
     }
 }

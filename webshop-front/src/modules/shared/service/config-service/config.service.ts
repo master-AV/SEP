@@ -38,4 +38,23 @@ export class ConfigService {
     return `${this.AUTH_URL}/increment-failed-attempts/${email}`;
   }
 
+
+  ///PAYPAL
+  PAYPAL_URL = `${this.API_URL}/paypal`;
+
+  ///BITCOIN
+  BITCOIN_URL = `${this.API_URL}/bitcoin`;
+
+  ///QR
+  QR_URL = `${this.API_URL}/qr`;
+
+  ///CC
+  CC_URL = `${this.API_URL}/cc`;
+  //PAY
+  CC_PAY_URL = `${this.API_URL}/cc/pay`;
+
+  getPaymentIdUrl(id: number){
+    return `${this.CC_URL}/payment/${id}`;
+  }
+
 }

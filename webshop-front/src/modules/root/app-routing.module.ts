@@ -16,7 +16,17 @@ const routes: Routes = [
         path: "auth",
         loadChildren: () =>
           import("./../auth/auth.module").then((m) => m.AuthModule),
-      }
+      },
+      {
+        path: "psp",
+        loadChildren: () =>
+          import("./../payment/payment.module").then((m) => m.PaymentModule),
+      },
+      {
+        path: "cc",
+        loadChildren: () =>
+          import("./../credit-card/credit-card.module").then((m) => m.CreditCardModule),
+      },
     ]
   },
 ];
