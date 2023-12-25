@@ -1,0 +1,14 @@
+<div>
+    <app-offers *ngIf="showScreen() === 'OK'"></app-offers>
+    <div class="form-container text-center" *ngIf="showScreen() !== 'OK'">
+        <h2 *ngIf="showScreen() === 'BUY'">
+            Firstly, you have to pay membership fee.
+        </h2>
+        <h2 *ngIf="showScreen() === 'EXTEND'">
+            Your membership fee is expired. You have to pay membership fee again.
+        </h2>
+        <button mat-raised-button *ngIf="showScreen() === 'BUY' || showScreen() === 'EXTEND'" (click)="payFee()">
+            PAY
+        </button>
+    </div>
+</div>

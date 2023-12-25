@@ -14,7 +14,6 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping(value = "/cc") // TODO: CHANGE
-@CrossOrigin("http://localhost:4201")
 public class PaymentController {
 
     @Autowired

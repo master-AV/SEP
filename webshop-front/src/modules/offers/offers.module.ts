@@ -5,13 +5,15 @@ import { RouterModule } from "@angular/router";
 import { MaterialModule } from "../material/material.module";
 import { OffersRoutes } from "./offers.routes";
 import { OfferComponent } from './components/offer/offer.component';
-import { OffersComponent } from './pages/offers/offers.component';
 import { SharedModule } from "../shared/shared.module";
+import { HomeComponent } from "./pages/home/home.component";
+import { OffersComponent } from "./components/offers/offers.component";
 
 @NgModule({
   declarations: [
     OfferComponent,
-    OffersComponent
+    OffersComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,

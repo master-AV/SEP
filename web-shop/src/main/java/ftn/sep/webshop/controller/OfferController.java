@@ -16,6 +16,10 @@ public class OfferController {
     @Autowired
     private IOfferService offerService;
 
+    @GetMapping(value = "/hi")
+    public void hiFunc() {
+        System.out.println("HEEEEY FROM API gateway");
+    }
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<OfferResponse> getAllOffers(){

@@ -9,8 +9,8 @@ export class AuthInterceptor implements HttpInterceptor {
     request = request.clone({
       withCredentials: true,
       setHeaders: {
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": "*"
+        "Authorization": `Bearer ${sessionStorage.getItem("token") || ''}`,
+        "Access-Control-Allow-Credentials": "true"
       }
     });
     return next.handle(request);

@@ -20,9 +20,7 @@
             "outputPath": "dist/webshop-front",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -31,7 +29,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/my-theme.css"
+              "src/my-theme.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
@@ -83,10 +82,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -95,7 +91,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/my-theme.css"
+              "src/my-theme.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           }

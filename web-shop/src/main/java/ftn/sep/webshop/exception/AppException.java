@@ -1,7 +1,7 @@
 package ftn.sep.webshop.exception;
 
 
-public class AppException extends Exception {
+public class AppException extends Exception{
 
     private final String message;
 

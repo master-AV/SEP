@@ -9,9 +9,12 @@ ftn/sep/dto/response/OfferResponse.class
 ftn/sep/enums/OfferType.class
 ftn/sep/db/Transaction.class
 ftn/sep/util/Constants.class
+ftn/sep/db/Privilege.class
 ftn/sep/classes/Location.class
 ftn/sep/classes/payment/CreditCard.class
+ftn/sep/db/RegistrationVerification.class
 ftn/sep/classes/payment/QRCode.class
 ftn/sep/classes/Administration.class
+ftn/sep/db/Role.class
 ftn/sep/dto/request/CreatePaymentRequest.class
 ftn/sep/classes/payment/Bitcoin.class
