@@ -1,5 +1,6 @@
 package com.master.bank.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.bank.dto.*;
 import com.master.bank.exception.NonExistentAccountException;
 import com.master.bank.exception.NotValidPaymentException;
@@ -10,6 +11,7 @@ import com.master.bank.model.SalesAccount;
 import com.master.bank.model.TransactionState;
 import com.master.bank.repository.PaymentInformationRepository;
 import com.master.bank.repository.SalesAccountRepository;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -57,13 +60,15 @@ public class PaymentService {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private CryptoService cryptoService;
 
 
     public PaymentInfoDTO requestPayment(PaymentURLRequestDTO requestDTO) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     requestDTO.getMerchantId(), requestDTO.getMerchantPassword()));
-            SalesAccount salesAccount = salesAccountRepository.findByMerchantId(requestDTO.getMerchantId());
+            SalesAccount salesAccount = salesAccountRepository.findByMerchantId(cryptoService.encrypt(requestDTO.getMerchantId()));
             PaymentInformation paymentInformation = new PaymentInformation(salesAccount, requestDTO.getAmount(), requestDTO.getMerchantOrderId());
             this.paymentInformationRepository.save(paymentInformation);
             PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURL(), paymentInformation, requestDTO.getMerchantOrderId());
@@ -83,48 +88,67 @@ public class PaymentService {
         return environment.getProperty("bank.url.failed");
     }
 
-
-
     private String generatePaymentURL() {
         return environment.getProperty("bank.url.success");//this.basicURL + "payment/cc";
     }
 
-    public EndPaymentDTO startPayment(CardDTO cardDTO, boolean pccRequest) {
+    private String generatePaymentURLRQ() {
+        return environment.getProperty("bank.url.qr.success");//this.basicURL + "payment/cc";
+    }
+
+    @Transactional()
+    public EndPaymentDTO startPayment(CardDTO cardDTO) {
+        PaymentInformation paymentInfo = paymentInformationRepository.findByPaymentId(cardDTO.getPaymentId())
+                .orElse(null);
         try {
             if (!this.accountService.checkCardInfoValidity(cardDTO))
                 throw new NotValidPaymentException("Payment is not valid");
-            Account buyerAccount = accountService.getAccountByPAN(cardDTO.getPAN());
-            PaymentInformation paymentInfo = paymentInformationRepository.findByPaymentId(cardDTO.getPaymentId());
-            TransactionState state = checkAmountOfMoney(buyerAccount, paymentInfo);
+            Account buyerAccount = accountService.getAccountByPAN(cryptoService.encrypt(cardDTO.getPAN()));//
+            if (cryptoService.decrypt(buyerAccount.getPAN()).charAt(0) != (cardDTO.getPAN().charAt(0))){
+                System.out.println("PCC");
+                return sendRequestToPCC(cardDTO, paymentInfo.getAmount());
+            }
+            TransactionState state = checkAmountOfMoney(buyerAccount, paymentInfo.getAmount());
             return this.endPayment(paymentInfo, generateIdNumber10(), LocalDateTime.now(), state);
         }catch (NonExistentAccountException existentAccountException){
-
-            sendRequestToPCC(cardDTO);
+            return sendRequestToPCC(cardDTO, paymentInfo.getAmount());
         }
-//        else //3.b
-//            sendRequestToPCC(cardDTO);
-        return null;
     }
 
-    private void sendRequestToPCC(CardDTO cardDTO) {
+    public EndPaymentDTO startPaymentFromPCC(CardDTO cardDTO, double amount) {
+        System.out.println("Start Payment - PCC");
+//        try {
+        if (!this.accountService.checkCardInfoValidity(cardDTO))
+            throw new NotValidPaymentException("Payment is not valid");
+        Account buyerAccount = accountService.getAccountByPAN(cryptoService.encrypt(cardDTO.getPAN()));//)
+        TransactionState state = checkAmountOfMoney(buyerAccount, amount);
+        return this.endPayment(null, generateIdNumber10(), LocalDateTime.now(), state);
+//        }catch (NonExistentAccountException existentAccountException){
+//            sendRequestToPCC(cardDTO);
+//        }
+//        return null;
+    }
+
+    private EndPaymentDTO sendRequestToPCC(CardDTO cardDTO, double amount) {
         System.out.println("SEND REQUEST TO PCC");
         try {
-            URL url = new URL(pccUrl + "/req");
+            URL url = new URL(pccUrl + "/req/" + amount);
             System.out.println(url.getPath());
             PccRequestDTO dto = new PccRequestDTO(cardDTO, generateIdNumber10(), LocalDateTime.now());
             HttpEntity<PccRequestDTO> request = new HttpEntity<>(dto);
-//            ResponseEntity<?> result = ;
-            restTemplate.postForEntity("http://localhost:8082/pcc/req", request, null);
-//            HttpHeaders httpHeaders = result.getHeaders();
-            System.out.println("RQUEST ENDED");
-
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-//        } catch (URISyntaxException e) { // toURI()
-//            throw new RuntimeException(e);
-        }catch (Exception ex) {
+            ResponseEntity<EndPaymentDTO> res = restTemplate.postForEntity("http://localhost:8082/pcc/req/" + amount, request, EndPaymentDTO.class);
+            EndPaymentDTO endPaymentDTO = res.getBody();
+            System.out.println(endPaymentDTO.getMerchantOrderId());
+            System.out.println(endPaymentDTO.getPaymentId());
+            System.out.println(endPaymentDTO.getTransactionState());
+            System.out.println(endPaymentDTO.getAcquirerTimestamp());
+            System.out.println("sendRequestToPCC - RQUEST ENDED");
+            System.out.println(res.getBody());
+            return endPaymentDTO;
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }
+        return null;
     }
 
     private long generateIdNumber10() {
@@ -133,18 +157,18 @@ public class PaymentService {
         return randomNumberInRange+randomNumberInRange2;
     }
 
-    private TransactionState checkAmountOfMoney(Account buyerAccount, PaymentInformation paymentInfo) {
-        if (buyerAccount.getAvailableMoney() > paymentInfo.getAmount()){
-            buyerAccount.setAvailableMoney(buyerAccount.getAvailableMoney()-paymentInfo.getAmount());
-            buyerAccount.setReservedMoney(buyerAccount.getReservedMoney()+paymentInfo.getAmount());
+    private TransactionState checkAmountOfMoney(Account buyerAccount, double amount) {
+        if (buyerAccount.getAvailableMoney() > amount){
+            buyerAccount.setAvailableMoney(buyerAccount.getAvailableMoney()-amount);
+            buyerAccount.setReservedMoney(buyerAccount.getReservedMoney()+amount);
             accountService.save(buyerAccount);
             return TransactionState.SUCCESSFUL;
         }
         return TransactionState.FAILED;
     }
 
-    public void startPaymentFromPCC(PccRequestDTO pccRequestDTO) {
-        this.startPayment(pccRequestDTO.getCardDTO(), true);
+    public EndPaymentDTO startPaymentFromPCC(PccRequestDTO pccRequestDTO, double amount) {
+        EndPaymentDTO endPaymentDTO = this.startPaymentFromPCC(pccRequestDTO.getCardDTO(), amount);
         System.out.println("GOT REQUEST From PCC");
         try {
             URL url = new URL(pccUrl + "/res");
@@ -153,8 +177,9 @@ public class PaymentService {
             HttpEntity<PccRequestDTO> request = new HttpEntity<>(dto);
             ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, null);
             HttpHeaders httpHeaders = result.getHeaders();
-            System.out.println("RQUEST ENDED");
-
+            System.out.println("startPaymentFromPCC - RQUEST ENDED");
+//            return this.endPayment(paymentInfo, generateIdNumber10(), LocalDateTime.now(), state);
+            return endPaymentDTO;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
@@ -162,13 +187,43 @@ public class PaymentService {
         }
     }
 
-    public void endPaymentFromPCC(PccResponseDTO pccResponseDTO) {
-        PaymentInformation paymentInformation = paymentInformationRepository.findByPaymentId(pccResponseDTO.getCardDTO().getPaymentId());
-        this.endPayment(paymentInformation, pccResponseDTO.getAcquirerOrderId(), pccResponseDTO.getAcquirerTimestamp(), TransactionState.SUCCESSFUL);
+    public EndPaymentDTO endPaymentFromPCC(PccResponseDTO pccResponseDTO) {
+        PaymentInformation paymentInformation = paymentInformationRepository.findByPaymentId(pccResponseDTO.getCardDTO().getPaymentId())
+                .orElse(null);
+        return this.endPayment(paymentInformation, pccResponseDTO.getAcquirerOrderId(), pccResponseDTO.getAcquirerTimestamp(), TransactionState.SUCCESSFUL);
     }
 
     private EndPaymentDTO endPayment(PaymentInformation paymentInformation, long acquirerOrderId,
                                      LocalDateTime acquirerTimestamp, TransactionState transactionState){
         return new EndPaymentDTO(paymentInformation, acquirerOrderId, acquirerTimestamp, transactionState);
+    }
+
+    public Pair<PaymentInfoDTO, String> requestPaymentQR(PaymentURLRequestDTO requestDTO) {
+        try {
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                    requestDTO.getMerchantId(), requestDTO.getMerchantPassword()));
+            SalesAccount salesAccount = salesAccountRepository.findByMerchantId(cryptoService.encrypt(requestDTO.getMerchantId()));
+
+            //qr
+            QRMerchantDTO qrMerchantDTO = new QRMerchantDTO(
+                    cryptoService.decrypt(salesAccount.getAccount().getPAN()),
+                    salesAccount.getAccount().getCardHolderName(), requestDTO.getAmount());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(qrMerchantDTO);
+            String qrCode = QRCodeGenerator.generateQRCodeImage(json, 250,250);
+
+            PaymentInformation paymentInformation = new PaymentInformation(salesAccount, requestDTO.getAmount(), requestDTO.getMerchantOrderId());
+            this.paymentInformationRepository.save(paymentInformation);
+            PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURLRQ(), paymentInformation, requestDTO.getMerchantOrderId());
+            System.out.println("Bank - servis - arrived");
+            return new Pair(p, qrCode);
+        }catch (AuthenticationException aut){
+            System.out.println("Bank - servis - auth ex");
+            throw new NotValidPaymentRequestException("Payment parameters are not valid", generateFailedUrl());
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw new RuntimeException();
+        }
     }
 }

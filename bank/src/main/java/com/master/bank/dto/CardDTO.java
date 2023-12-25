@@ -8,10 +8,10 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class CardDTO {
-    private String PAN;
-    private String securityCode;
-    private String cardHolderName;
-    private LocalDate expirationDate;
-    private String paymentId;
+    protected String PAN;
+    protected String securityCode;
+    protected String cardHolderName;
+    protected LocalDate expirationDate;
+    protected String paymentId;
 
 }

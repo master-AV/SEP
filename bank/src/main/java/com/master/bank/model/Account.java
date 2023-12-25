@@ -17,22 +17,22 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String PAN;
-    private String securityCode;
+    private String PAN;//
+    private String securityCode;//
     private String cardHolderName;
-    private LocalDate expirationDate;
-    private int reservedMoney;
-    private int availableMoney;
-
-//    private BankType bankType;
+    private String expirationDate;
+    private double reservedMoney;
+    private double availableMoney;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
+        LocalDate thisExpDate = LocalDate.parse(expirationDate);
+        LocalDate objExpDate = LocalDate.parse(account.getExpirationDate());
         return PAN.equals(account.PAN) && securityCode.equals(account.securityCode) && cardHolderName.equals(account.cardHolderName)
-                && expirationDate.getYear() == account.expirationDate.getYear() && expirationDate.getMonth() == account.expirationDate.getMonth();
+           && thisExpDate.getYear() == objExpDate.getYear() && thisExpDate.getMonth() == objExpDate.getMonth();
     }
 
     @Override

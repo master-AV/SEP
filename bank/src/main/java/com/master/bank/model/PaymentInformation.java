@@ -20,13 +20,13 @@ public class PaymentInformation {
 
     private String paymentId;
     private long merchantOrderId;
-    private int amount;
+    private double amount;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = true)
     private SalesAccount account;
 
-    public PaymentInformation(SalesAccount salesAccount, int amount, long merchantOrderId) {
+    public PaymentInformation(SalesAccount salesAccount, double amount, long merchantOrderId) {
         this.account = salesAccount;
         this.paymentId = generatePaymentID();
         this.amount=amount;

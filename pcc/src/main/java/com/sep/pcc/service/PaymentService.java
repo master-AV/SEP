@@ -34,22 +34,24 @@ public class PaymentService {
     private PccRequestRepository pccRequestRepository;
 
 
-    public void handlePCCRequest(PccRequestDTO requestDTO) {
+    public ResponseEntity<?> handlePCCRequest(PccRequestDTO requestDTO, double amount) {
         //validate
-        PccRequest req = new PccRequest(requestDTO.getCardDTO().getPAN(), requestDTO.getAcquirerOrderId(), requestDTO.getAcquirerTimestamp());
+        PccRequest req = new PccRequest(requestDTO.getCardDTO().getPaymentId(), requestDTO.getAcquirerOrderId(), requestDTO.getAcquirerTimestamp());
         pccRequestRepository.save(req);
         try {
             URL url = null;
             if (requestDTO.getCardDTO().getPAN().charAt(0) == '0')
-                url = new URL(bankUrl + "pcc/req");
+                url = new URL(bankUrl + "pcc/req/" + amount);
             else
-                url = new URL(bank2Url + "pcc/req");
+                url = new URL(bank2Url + "pcc/req/" + amount);
             System.out.println("PAN: " + requestDTO.getCardDTO().getPAN());
             System.out.println("To bank: " + url.toURI());
             HttpEntity<PccRequestDTO> request = new HttpEntity<>(requestDTO);
-            ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, CardDTO.class);
+            ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, Object.class);
             HttpHeaders httpHeaders = result.getHeaders();
             System.out.println("RQUEST ENDED");
+            System.out.println(result.getBody());
+            return result;
 
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
@@ -58,7 +60,7 @@ public class PaymentService {
         }
     }
 
-    public void handlePCCResponse(PccResponseDTO requestDTO) {
+    public ResponseEntity<?> handlePCCResponse(PccResponseDTO requestDTO) {
         PccRequest req = this.pccRequestRepository.findByAcquirerOrderIdAndAcquirerTimestamp(requestDTO.getAcquirerOrderId(), requestDTO.getAcquirerTimestamp());
         req.setIssuerTimestamp(requestDTO.getIssuerTimestamp());
         req.setIssuerOrderId(requestDTO.getIssuerOrderId());
@@ -70,7 +72,7 @@ public class PaymentService {
             ResponseEntity<?> result = restTemplate.postForEntity(url.toURI(), request, CardDTO.class);
             HttpHeaders httpHeaders = result.getHeaders();
             System.out.println("RQUEST ENDED");
-
+            return result;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) { // toURI()

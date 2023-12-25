@@ -1,23 +1,16 @@
-package com.sep.psp.model;
+package com.sep.qr.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Webshop {
-
-    @Id
-    @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class PaymentUrlDTO {
+    private int amount;
     private String merchantId;
     private String merchantPassword;
 }

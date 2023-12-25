@@ -14,7 +14,7 @@ public class PaymentURLRequestDTO {
 //    @JsonProperty(required = true)
     private String merchantPassword; // 100
 //    @JsonProperty(required = true)
-    private int amount; // 10 2 --
+    private double amount; // 10 2 --
 //    @JsonProperty(required = true)
     private long merchantOrderId; // 10 -- generate
 //    @JsonProperty(required = true)

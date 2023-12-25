@@ -1,6 +1,8 @@
 package com.master.bank.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Collection;
 
 @Entity
+@Getter
+@Setter
 public class SalesAccount implements UserDetails {
 
 
@@ -59,4 +63,11 @@ public class SalesAccount implements UserDetails {
         return true;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

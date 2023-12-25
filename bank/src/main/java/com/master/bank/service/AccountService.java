@@ -15,12 +15,15 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private CryptoService cryptoService;
+
     public boolean checkCardInfoValidity(CardDTO cardDTO){
-        Account account = getAccountByPAN(cardDTO.getPAN());
-        if (cardDTO.getPAN().equals(account.getPAN()) &&
-            cardDTO.getSecurityCode().equals(account.getSecurityCode()) &&
-            cardDTO.getCardHolderName().equals(account.getCardHolderName()) &&
-            cardDTO.getExpirationDate().equals(account.getExpirationDate())) return true;
+        Account account = getAccountByPAN(cryptoService.encrypt(cardDTO.getPAN()));
+        if (cryptoService.encrypt(cardDTO.getPAN()).equals(account.getPAN()) &&
+            cryptoService.encrypt(cardDTO.getSecurityCode()).equals(account.getSecurityCode()) &&
+            cryptoService.encrypt(cardDTO.getCardHolderName()).equals(account.getCardHolderName())
+                &&  cryptoService.encrypt(cardDTO.getExpirationDate().toString()).equals(account.getExpirationDate())) return true;
         return false;
     }
 

@@ -73,7 +73,7 @@ export class ChoosePaymentMethodComponent {
         this.creditCardPayment();
         break;
       case "QR CODE":
-        this.qrCodePayment();
+        this.qrCodePayment(paymentRequest);
         break;
     }
   }
@@ -102,11 +102,13 @@ export class ChoosePaymentMethodComponent {
     )
   }
 
-  private qrCodePayment() {
-    this.qrService.qrCodePayment().subscribe(
-      response => {
-        this.toast.info(response.message);
-      }
-    )
+  private qrCodePayment(paymentRequest: PaymentRequest) {
+    this.qrService.toPaymentMethod(this.id).subscribe(response => {
+      console.log(response);
+      localStorage.setItem('qrCode', response['body']['qrCode']);
+      localStorage.setItem('userId', String(paymentRequest.userId));
+      window.location.href = response.headers.get('Location')
+    });
   }
+
 }

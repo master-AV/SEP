@@ -17,6 +17,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./../credit-card/credit-card.module").then((m) => m.CreditCardModule),
       },
+      {
+        path: "qr",
+        loadChildren: () =>
+          import("./../qr-code/qr-code.module").then((m) => m.QrCodeModule),
+      },
     ]
   },
   // {

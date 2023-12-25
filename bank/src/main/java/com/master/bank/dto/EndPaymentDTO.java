@@ -23,8 +23,10 @@ public class EndPaymentDTO {
     public EndPaymentDTO(PaymentInformation paymentInformation, long acquirerOrderId,
                          LocalDateTime acquirerTimestamp, TransactionState transactionState) {
         this.transactionState = transactionState;
-        this.paymentId = paymentInformation.getPaymentId();
-        this.merchantOrderId = paymentInformation.getMerchantOrderId();
+        if (paymentInformation != null){
+            this.paymentId = paymentInformation.getPaymentId();
+            this.merchantOrderId = paymentInformation.getMerchantOrderId();
+        }
         this.acquirerOrderId = acquirerOrderId;
         this.acquirerTimestamp = acquirerTimestamp;
     }
