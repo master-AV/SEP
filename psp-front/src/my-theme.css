@@ -3029,7 +3029,7 @@ td.mat-footer-cell {
 
 .form-container {
   display: block;
-  max-width: 27rem;
+  max-width: 20rem;
   margin: 2rem auto auto;
   background-color: var(--gray);
   color: var(--deep-blue);

@@ -7,6 +7,7 @@ import { PaypalService } from '../../services/paypal-service/paypal.service';
 import { BitcoinService } from '../../services/bitcoin-service/bitcoin.service';
 import { ToastrService } from 'ngx-toastr';
 import {QrCodeService} from "../../services/qr/qr-code.service";
+import { PaymentMethodService } from '../../services/payment-method-service/payment-method-service.service';
 @Component({
   selector: 'app-choose-credit-card',
   templateUrl: './choose-payment-method.component.html',
@@ -15,44 +16,29 @@ import {QrCodeService} from "../../services/qr/qr-code.service";
 export class ChoosePaymentMethodComponent {
   id: number;
 
-  paymentMethods = [
-    {
-      name: 'CREDIT CARD',
-      img: './assets/credit-card.png'
-    },
-    {
-      name: 'QR CODE',
-      img: './assets/qr-code.png'
-    },
-    {
-      name: 'PAYPAL',
-      img: './assets/paypal.png'
-    },
-    {
-      name: 'BITCOIN',
-      img: './assets/bitcoin.png'
-    }
-  ];
+  paymentMethods = [];
 
   ngOnInit() {
-    // Accessing URL parameter using ActivatedRoute
     this.route.queryParamMap.subscribe(params => {
       this.id = +params.get('id');
-      console.log('ID:', this.id); // Use the retrieved parameter value
+    });
+
+    this.paymentMethodService.getSubscribedPaymentMethods().subscribe(response => {
+      this.paymentMethods = response;
     });
   }
 
   constructor(private readonly fb: FormBuilder, private route: ActivatedRoute,
               private cardService: CreditCardService, private paypalService: PaypalService,
               private bitcoinService: BitcoinService, private toast: ToastrService,
-              private qrService: QrCodeService) {
+              private qrService: QrCodeService, private paymentMethodService: PaymentMethodService
+              ) {
 
   }
 
   creditCardPayment() {
     this.cardService.toPaymentMethod(this.id).subscribe(response => {
       window.location.href = response.headers.get('Location')
-
     });
   }
 

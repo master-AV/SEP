@@ -19,4 +19,10 @@ export class ConfigService {
   ///QR
   QR_API_URL = environment.qrApiUrl;
   QR_URL = `${this.QR_API_URL}/qr`;
+
+  //PAYMENT METHOD
+  PAYMENT_METHOD_API_URL = environment.pspApiUrl;
+  PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_API_URL}/payment-method`;
+  SUBSCRIBED_PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_URL}/subscribed`;
+  UPDATE_SUBSCRIBED_PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_URL}/subscribed/update`;
 }
