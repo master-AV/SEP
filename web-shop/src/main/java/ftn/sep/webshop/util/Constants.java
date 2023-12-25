@@ -34,7 +34,7 @@ public class Constants {
     public static final int SALT_LENGTH = 4;
     public static final int ZERO_FAILED_ATTEMPTS = 0;
     public static final int MAX_NUM_VERIFY_TRIES = 3;
-    public static final String FRONT_VERIFY_URL = "https://localhost:4200/auth/verify/";
+    public static final String FRONT_VERIFY_URL = "http://localhost:4200/auth/verify/";
     public static final String EMAIL = "smart.home.ftn23@gmail.com";
     public static final String SUBJECT_VERIFY_USER = "Activate your profile.";
 
