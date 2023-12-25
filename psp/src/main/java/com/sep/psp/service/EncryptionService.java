@@ -62,4 +62,12 @@ public class EncryptionService {
         webshop.setMerchantPassword(cryptoService.decrypt(webshop.getMerchantPassword()));
         return webshop;
     }
+
+    public AccountInformation encryptAccountInformation(AccountInformation accountInformation) {
+        accountInformation.setPAN(cryptoService.encrypt(accountInformation.getPAN()));
+        accountInformation.setSecurityCode(cryptoService.encrypt(accountInformation.getSecurityCode()));
+        accountInformation.setCardHolderName(cryptoService.encrypt(accountInformation.getCardHolderName()));
+        accountInformation.setExpirationDate(cryptoService.encrypt(accountInformation.getExpirationDate()));
+        return accountInformation;
+    }
 }

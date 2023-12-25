@@ -14,10 +14,12 @@ export class SaveCcInformationComponent {
   }
 
   submit(cc: CardDto) {
+    console.log(cc);
     this.qr.saveCardDto(cc).subscribe(
       response => {
         console.log(response)
         console.log("SAVED cc")
+        window.location.href = "http://localhost:4201/psp/qr/" + cc.paymentId;
         // this.router.navigateByUrl(`/psp/qr/${cc.paymentId}`);
       }
     )

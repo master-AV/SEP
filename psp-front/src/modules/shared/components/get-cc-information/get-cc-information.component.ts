@@ -40,7 +40,7 @@ export class GetCcInformationComponent {
     if (this.ccFormGroup.valid && this.PANFormControl.value != null && this.yearFormControl.value != null
       && this.cardHolderNameFormControl.value != null && this.securityFormControl.value != null){
       let cc : CardDto = {
-        pan: +this.PANFormControl.value,
+        pan: this.PANFormControl.value,
         cardHolderName: this.cardHolderNameFormControl.value,
         expirationDate: this.getLastDayOfMonth(+this.yearFormControl.value, +this.monthFormControl.value),// new Date('2024-4-01'),//new Date(+this.yearFormControl.value, +this.monthFormControl.value, 31)
         securityCode: +this.securityFormControl.value,
