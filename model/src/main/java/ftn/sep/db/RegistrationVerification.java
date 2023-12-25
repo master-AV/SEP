@@ -56,29 +56,6 @@ public class RegistrationVerification {
         this.hashedId = hashedId;
     }
 
-    public boolean isNotUsed() {
-        return !this.used;
-    }
-
-    public boolean hasTries(int MAX_NUM_VERIFY_TRIES) {
-        return this.failedAttempts < MAX_NUM_VERIFY_TRIES;
-    }
-
     public int incrementNumOfTries() {return this.failedAttempts += 1;}
 
-//    public boolean checkSecurityCode(String securityCode){
-//
-//        return BCrypt.checkpw(securityCode, this.securityCode);
-//    }
-
-    public boolean notExpired() {
-
-        return this.expires.isAfter(LocalDateTime.now());
-    }
-
-//    public boolean canVerify(String securityCode, int MAX_NUM_VERIFY_TRIES) {
-//        return isNotUsed() && hasTries(MAX_NUM_VERIFY_TRIES) && checkSecurityCode(securityCode, MAX_NUM_VERIFY_TRIES) && notExpired();
-//    }
-
-    public boolean wrongCodeButHasTries(int MAX_NUM_VERIFY_TRIES) {return hasTries(MAX_NUM_VERIFY_TRIES) && isNotUsed() && notExpired(); }
 }

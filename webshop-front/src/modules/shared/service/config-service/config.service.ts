@@ -19,7 +19,7 @@ export class ConfigService {
   VERIFY_URL = `${this.API_URL}/verify`;///////////////////////////////
   SEND_CODE_AGAIN_URL = `${this.VERIFY_URL}/send-code-again`;///////////////////////////////
   USERS_URL = `${this.API_URL}/users`;
-  CREATE_REGULAR_USER_URL = `${this.AUTH_URL}/register`;
+  CREATE_REGULAR_USER_URL = `${this.USERS_URL}/register`;
   ACTIVATE_ACCOUNT_URL = `${this.USERS_URL}/activate-account`;///////////////////////////////
 
   getLoginUrl(): string {

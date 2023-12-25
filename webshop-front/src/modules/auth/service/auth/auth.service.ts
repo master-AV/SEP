@@ -21,7 +21,7 @@ export class AuthService {
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
     console.log("sending")
     return this.http.post<LoginResponse>(
-      "http://localhost:8092/id/login",//this.configService.getLoginUrl(),
+      this.configService.getLoginUrl(),
       loginRequest
       );
     }

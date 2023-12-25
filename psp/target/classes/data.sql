@@ -1,0 +1,1 @@
+insert into webshop(merchant_id, merchant_password) values ('1', '123');

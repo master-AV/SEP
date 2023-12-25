@@ -3,7 +3,28 @@
     Agencija
   </a>
   <div class="spacer">
-    <div>
-    </div>
+    <a
+      *ngIf="!loggedUser"
+      [routerLink]="['/auth/login']"
+      routerLinkActive="active"
+      mat-button
+      color="primary"
+      id="login"
+    >
+      Log in
+    </a>
+    <a
+      *ngIf="!loggedUser"
+      [routerLink]="['/auth/register']"
+      routerLinkActive="active"
+      mat-raised-button
+      class="a-sign-up"
+      >
+      Sign up
+      </a>
+
+      <div *ngIf="loggedUser" class="temp">
+        <button mat-raised-button (click)="logOut()">Log out</button>
+      </div>
   </div>
 </mat-toolbar>

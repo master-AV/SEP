@@ -5,13 +5,12 @@ export interface Role {
 }
 
 export interface User {
-  id: number;
+  id?: number;
   email: string;
   name: string;
   surname: string;
-  country: string;
-  city: string;
-  accountStatus: string;
+  password: string;
+  confirmPassword?: string;
   role: Role;
 }
  

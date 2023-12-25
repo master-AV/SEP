@@ -16,19 +16,6 @@
                     Email is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
-
-           <!-- <mat-form-field appearance="fill" class="role-colomn">
-                <mat-label>Role</mat-label>
-                <mat-select formControlName="roleFormControl">
-                    <mat-option *ngFor="let role of regularUserRoles" [value]="role">
-                        {{role}}
-                    </mat-option>
-                </mat-select>
-                <mat-error name="emptyRole" *ngIf="registrationForm.get('roleFormControl').hasError('required')">
-                    Role is <strong>required</strong>
-                </mat-error>
-            </mat-form-field>-->
-
         </div>
         <div style="display: flex">
             <mat-form-field class="colomn" appearance="fill">
@@ -108,7 +95,7 @@
                           .get('passwordAgainFormControl')!
                           .hasError('required')
                       ">
-                    Password should contains at least 8 characters, one digit and one
+                    Password should contains at least 12 characters, one digit and one
                     special character
                 </mat-error>
                 <mat-error name="emptyPasswordAgain" *ngIf="
@@ -136,7 +123,7 @@
         </div>
 
         <span class="center margin-top">Already have an account?
-            <a [routerLink]="['/smart-home/auth/login']" style="margin-left: 5px" class="link">Log in</a>
+            <a [routerLink]="['/auth/login']" style="margin-left: 5px" class="link">Log in</a>
         </span>
     </form>
 </div>

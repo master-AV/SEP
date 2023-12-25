@@ -1,20 +1,18 @@
 package com.sep.id.controller;
 
-import com.sep.id.dto.*;
-import com.sep.id.exception.EntityNotFoundException;
-import com.sep.id.exception.MailCannotBeSentException;
-import com.sep.id.exception.UserLockedException;
-import com.sep.id.exception.WrongVerifyTryException;
-import com.sep.id.service.AuthService;
-import com.sep.id.service.UserService;
-import com.sep.id.service.VerificationService;
+import com.sep.id.dto.request.LoginRequest;
+import com.sep.id.dto.request.VerifyRequest;
+import com.sep.id.dto.response.LoginResponse;
+import com.sep.id.exception.*;
+import com.sep.id.service.implementation.AuthService;
+import com.sep.id.service.implementation.UserService;
+import com.sep.id.service.implementation.VerificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +23,6 @@ import static com.sep.id.utils.ErrorMessageConstants.WRONG_VERIFY_HASH;
 @RestController
 @RequestMapping("/id")
 @Validated
-@CrossOrigin("http://localhost:4200")
 public class AuthController {
     @Autowired
     private AuthService authService;
@@ -38,18 +35,8 @@ public class AuthController {
 
     @PostMapping(path="/login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponse login(@Valid @RequestBody final LoginRequest loginRequest, HttpServletResponse response) {
-        return authService.login(loginRequest.getEmail(), loginRequest.getPassword(), response);
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<Boolean> addUser(@Valid @RequestBody RegistrationRequest userRequest, HttpServletRequest request) {
-        try {
-            authService.registerRequest(userRequest);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    public LoginResponse login(@Valid @RequestBody final LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) throws UserLockedException, InvalidCredsException, EntityNotFoundException {
+        return authService.login(loginRequest.getEmail(), loginRequest.getPassword(), request, response);
     }
 
 
@@ -59,12 +46,6 @@ public class AuthController {
         authService.logout(request);
     }
 
-
-    @PutMapping("/confirm-pin")
-    @ResponseStatus(HttpStatus.OK)
-    public void confirmPin(@Valid @RequestBody final ConfirmPinRequest confirmPinRequest) throws UserLockedException {
-        authService.confirmPin(confirmPinRequest.getEmail(), confirmPinRequest.getPin());
-    }
 
     @PostMapping("/send-code-again")
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,6 +1,9 @@
 package com.sep.id.security;
 
-import com.sep.id.dto.UserResponse;
+
+import com.sep.id.dto.response.UserResponse;
+import ftn.sep.db.Privilege;
+import ftn.sep.db.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,11 +18,30 @@ public class UserPrinciple implements UserDetails {
         this.userResponse = userResponse;
     }
 
+
+    private List<String> getPrivileges(Role role) {
+
+        List<String> privileges = new ArrayList<>();
+        privileges.add(role.getRoleName());
+        List<Privilege> collection = new ArrayList<>(role.getPrivileges());
+
+        for (Privilege item : collection) {
+            privileges.add(item.getPrivilegeName());
+        }
+        return privileges;
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+        return authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(userResponse.getRole().getRoleName()));
-        return authorities;
+        return getGrantedAuthorities(getPrivileges(userResponse.getRole()));
     }
 
     @Override

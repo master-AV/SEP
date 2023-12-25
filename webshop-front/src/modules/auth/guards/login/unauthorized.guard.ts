@@ -11,7 +11,7 @@ export class UnauthorizedGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.authService.getLoggedParsedUser()){
-      this.router.navigate(["/smart-home/user/home"]);
+      this.router.navigate(["/offers"]);
 
       return false;
     }

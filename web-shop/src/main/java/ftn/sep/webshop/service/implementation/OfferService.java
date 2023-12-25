@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static ftn.sep.webshop.dto.response.OfferResponse.formOfferResponses;
-import static ftn.sep.webshop.util.Constants.OFFER_NOT_FOUND;
 
 @Service
 public class OfferService implements IOfferService {
@@ -35,7 +34,7 @@ public class OfferService implements IOfferService {
 
     public OfferResponse getById(Long id) {
         Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND));
+                .orElseThrow(EntityNotFoundException::new);
 
         return new OfferResponse(offer);
     }

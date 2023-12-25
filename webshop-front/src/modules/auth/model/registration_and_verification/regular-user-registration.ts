@@ -1,5 +1,5 @@
 
-export interface RegularUserRegistration {
+export interface UserRegistrationRequest {
   email: string;
   name: string;
   surname: string;

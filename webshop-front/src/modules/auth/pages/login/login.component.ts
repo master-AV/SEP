@@ -46,12 +46,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   getErrorMessage() {
-    // @ts-ignore
     if (this.loginForm.get('email').hasError('required')) {
       return 'Email is required';
     }
 
-    // @ts-ignore
     return this.loginForm.get('email').hasError('email')
       ? 'Not a valid email'
       : '';
@@ -66,9 +64,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.showSpiner = true;
       this.authSubscription = this.authService.login(loginRequest).subscribe(
         userResponse => {
-          console.log("res");
+          this.authService.setSessionStorage(userResponse);
           this.user = userResponse;
-          this.generatePin(userResponse.user.email);
+          this.router.navigate([`/offers`]);
         },
         error => {
           console.log("err");

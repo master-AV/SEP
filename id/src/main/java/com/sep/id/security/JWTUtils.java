@@ -2,12 +2,14 @@ package com.sep.id.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.sep.id.exception.InvalidJWTException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.sep.id.security.JwtProperties.SECRET;
+import static com.sep.id.security.JwtProperties.TOKEN_PREFIX;
 
 public class JWTUtils {
     public static String generateJWT(String email, String rawFingerPrint) {
@@ -19,7 +21,7 @@ public class JWTUtils {
     }
 
     public static String extractTokenFromRequest(HttpServletRequest request) {
-        return request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
+        return request.getHeader(JwtProperties.HEADER_STRING).replace(TOKEN_PREFIX, "");
     }
 
     public static DecodedJWT decodeToken(String token) {
@@ -34,10 +36,10 @@ public class JWTUtils {
         return jwt.getToken();
     }
 
-    public static String extractEmailFromJWT(DecodedJWT jwt)  {
+    public static String extractEmailFromJWT(DecodedJWT jwt) throws InvalidJWTException {
         String email = jwt.getSubject();
         if (email == null)
-            throw new RuntimeException("Cannot extract email/subject from jwt!");
+            throw new InvalidJWTException("Cannot extract email/subject from jwt!");
         return email;
     }
 

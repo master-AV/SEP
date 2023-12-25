@@ -72,10 +72,10 @@ export class VerificationComponent implements OnInit {
           res => {
             if (res) {
               this.toast.success(
-                'You became a new member of SmartHome!',
+                'You became a new member of SEP!',
                 'Verification successfully'
               );
-              this.router.navigate(['/smart-home/auth/successfull-verification']);
+              this.router.navigate(['/auth/successfull-verification']);
             } else {
               this.toast.error('Verification failed, try again later.', 'Verification failed!')
             }
@@ -99,7 +99,7 @@ export class VerificationComponent implements OnInit {
 
 
   goToLoginPage(){
-    this.router.navigate(["/smart-home/auth/login"]);
+    this.router.navigate(["/auth/login"]);
   }
 
   ngOnDestroy(): void {

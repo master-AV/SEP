@@ -1,18 +1,28 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: gateway-service
+  logging:
+    level:
+      org.springframework.cloud.gateway: DEBUG
   cloud:
     gateway:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:4200"
+            allowedOrigins:
+              - "http://localhost:4200"
+              - "http://localhost:4201"
             allowedMethods:
               - GET
               - POST
               - PUT
-            allowed-headers:
+            allowedHeaders:
               - '*'
+            exposedHeaders:
+              - 'Authorization'
+            allowCredentials: true
       discovery:
         locator:
           enabled: true
@@ -23,9 +33,16 @@ spring:
           #localhost:8443/
           predicates:
             - Path=/cc/** #http://localhost:8443/
-        - id: id-service
-          uri: http://localhost:8092/id #lb://id-service
-          #localhost:8443/
+        - id: web-users
+          uri: http://localhost:8081/
+          predicates:
+              - Path=/users/**
+        - id: web-offers
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/offers/**
+        - id: auth-service
+          uri: http://localhost:8092 #lb://id-service
           predicates:
             - Path=/id/** #http://localhost:8443/
 
@@ -42,7 +59,7 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/web-shop-db
     username: postgres
-    password: ftn
+    password: admin
   sql.init:
     platform: postgres
     mode: always
