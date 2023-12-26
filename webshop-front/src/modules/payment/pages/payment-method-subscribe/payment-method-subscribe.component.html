@@ -1,6 +1,6 @@
 <div class="form-container center">
     <h2>Izaberite način plaćanja</h2><br/>
-    <form [formGroup]="checkboxForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="checkboxForm">
         <div *ngFor="let pm of paymentMethods">
             <mat-checkbox [formControlName]="pm.name">{{ pm.name }}</mat-checkbox>
         </div><br/><br/>

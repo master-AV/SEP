@@ -8,13 +8,15 @@ import { SuccessPaypalComponent } from './pages/success-paypal/success-paypal.co
 import {PaySuccessComponent} from "./pages/payment-state/pay-success.component";
 import { ChoosePaymentMethodComponent } from "./pages/choose-payment-method/choose-payment-method.component";
 import { PaymentRoutes } from "./payment.routes";
+import { PaymentMethodSubscribeComponent } from "./pages/payment-method-subscribe/payment-method-subscribe.component";
 
 @NgModule({
   declarations: [
     ChoosePaymentMethodComponent,
     PaymentMethodComponent,
     PaySuccessComponent,
-    SuccessPaypalComponent
+    SuccessPaypalComponent,
+    PaymentMethodSubscribeComponent
   ],
   imports: [
     CommonModule,
