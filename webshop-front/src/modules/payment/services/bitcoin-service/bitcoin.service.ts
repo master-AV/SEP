@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ConfigService } from 'src/modules/shared/service/config-service/config.service';
 import { PaymentRequest } from '../../model/payment-request';
 import { Message } from '../../model/message';
 import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from '../../../shared/service/config-service/config.service';
 
 @Injectable({
   providedIn: 'root'

@@ -8,7 +8,6 @@ import java.util.Map;
 public interface IPayPalService {
     Map<String, String> createPayment(
             Long userId,
-            Long offerId,
-            boolean yearly
+            double price
     ) throws EntityNotFoundException, PayPalPaymentException;
 }

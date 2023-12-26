@@ -1,5 +1,6 @@
 package ftn.sep.webshop.controller;
 
+import ftn.sep.dto.MembershipDTO;
 import ftn.sep.webshop.dto.request.UserRegistrationRequest;
 import ftn.sep.webshop.dto.request.VerifyRequest;
 import ftn.sep.webshop.dto.response.UserResponse;
@@ -35,5 +36,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public boolean update(@Valid @RequestBody VerifyRequest verifyRequest) throws EntityNotFoundException, WrongVerifyTryException, EntityNotFoundException {
         return userService.activate(verifyRequest.getVerifyId(), verifyRequest.getSecurityCode());
+    }
+
+    @PostMapping("/membership")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateMembership(@RequestBody MembershipDTO membershipDTO) throws EntityNotFoundException {
+        userService.updateMembership(membershipDTO.getUserId(), membershipDTO.isSubscription());
     }
 }

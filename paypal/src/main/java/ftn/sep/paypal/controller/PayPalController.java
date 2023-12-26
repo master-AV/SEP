@@ -1,6 +1,6 @@
 package ftn.sep.paypal.controller;
 
-import ftn.sep.paypal.dto.request.CreatePaymentRequest;
+import ftn.sep.dto.PaymentDTO;
 import ftn.sep.paypal.exception.PayPalPaymentException;
 import ftn.sep.paypal.service.interfaces.IPayPalService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,9 +20,9 @@ public class PayPalController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, String> createPayment(@Valid @RequestBody CreatePaymentRequest createPaymentRequest)
+    public Map<String, String> createPayment(@Valid @RequestBody PaymentDTO paymentDTO)
             throws EntityNotFoundException, PayPalPaymentException {
 
-        return payPalService.createPayment(createPaymentRequest.getUserId(), createPaymentRequest.getOfferId(), createPaymentRequest.isYearly());
+        return payPalService.createPayment(paymentDTO.getUserId(), paymentDTO.getPrice());
     }
 }

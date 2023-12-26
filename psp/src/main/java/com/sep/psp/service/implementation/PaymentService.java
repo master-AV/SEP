@@ -1,16 +1,23 @@
-package com.sep.psp.service;
+package com.sep.psp.service.implementation;
 
+import com.sep.psp.dto.MembershipDTO;
+import com.sep.psp.dto.PaymentDTO;
 import com.sep.psp.dto.QRCardDTO;
 import com.sep.psp.dto.PaymentUrlDTO;
 
+import com.sep.psp.dto.request.PaymentRequest;
 import com.sep.psp.repository.AccountInformationRepository;
 import com.sep.psp.repository.WebshopRepository;
+import com.sep.psp.service.CryptoService;
+import com.sep.psp.service.EncryptionService;
+import com.sep.psp.service.interfaces.IPaymentService;
 import ftn.sep.db.AccountInformation;
 import ftn.sep.db.Webshop;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,8 +26,10 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.sep.psp.utils.Constants.MEMBERSHIP_PRICE;
+
 @Service
-public class PaymentService {
+public class PaymentService implements IPaymentService {
 
     @Autowired
     private WebshopRepository webshopRepository;
@@ -40,6 +49,9 @@ public class PaymentService {
     @Value("${webshop.url}")
     private String webshopUrl;
 
+    @Value("${apigateway.url}")
+    private String apigatewayUrl;
+
     @Autowired
     private AccountInformationRepository accountInformationRepository;
 
@@ -47,7 +59,7 @@ public class PaymentService {
     private CryptoService cryptoService;
 
 
-    public ResponseEntity<?> startPaymentForCC(int serviceId) {
+    private ResponseEntity<?> startPaymentForCC(int serviceId) {
         PaymentUrlDTO paymentUrlDTO = getPaymentUrlForService(serviceId);
         try {
             URL url = new URL(ccUrl + "req/payment");
@@ -60,15 +72,15 @@ public class PaymentService {
 
     private PaymentUrlDTO getPaymentUrlForService(int serviceId) {
         System.out.println("Getting the price of item: " + serviceId);
-        double amount = getPriceOfService(serviceId);
+        double amount = getPriceOfService(Long.valueOf(serviceId));
         System.out.println("Price: " + amount);
         Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
         return new PaymentUrlDTO(amount, webshop.getMerchantId(), webshop.getMerchantPassword());
     }
 
-    private double getPriceOfService(int amount) {
+    private double getPriceOfService(Long serviceId) {
         try {
-            URL url = new URL(webshopUrl + "offers/price/" + amount);
+            URL url = new URL(apigatewayUrl + "/offers/price/" + serviceId);
 
             return restTemplate.getForObject(url.toURI(), Double.class);
         } catch (MalformedURLException e) {
@@ -78,7 +90,7 @@ public class PaymentService {
         }
     }
 
-    public ResponseEntity<?> startRequestForQR(int serviceId) {
+    private ResponseEntity<?> startRequestForQR(int serviceId) {
         PaymentUrlDTO paymentUrlDTO = getPaymentUrlForService(serviceId);
         try {
             URL url = new URL(qrUrl + "req/payment");
@@ -89,7 +101,7 @@ public class PaymentService {
         }
     }
 
-    public ResponseEntity<?> startPaymentForQR(int userId, String paymentId, String merchantInformation) {
+    private ResponseEntity<?> startPaymentForQR(int userId, String paymentId, String merchantInformation) {
         AccountInformation acc = accountInformationRepository.findByUserId(userId)
                 .orElseThrow(()-> new EntityNotFoundException("No account information found"));
         QRCardDTO cardDTO = new QRCardDTO(encryptionService.decryptAccountInformation(acc), paymentId, merchantInformation);
@@ -101,4 +113,47 @@ public class PaymentService {
             throw new RuntimeException(e);
         }
     }
+
+
+    public ResponseEntity<?> payWithChosenMethod(PaymentRequest paymentRequest) throws MalformedURLException, URISyntaxException {
+        double price = 0.0;
+        if(paymentRequest.getOfferId() == 0L) {
+            price = MEMBERSHIP_PRICE;
+        } else {
+            price = getPriceOfService(paymentRequest.getOfferId());
+        }
+        PaymentDTO paymentDTO = new PaymentDTO(paymentRequest.getUserId(), price);
+        ResponseEntity<?> response = callPaymentMethod(paymentRequest.getMethod(), paymentDTO);
+        if(paymentRequest.getOfferId() == 0L && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)){
+            URL url = new URL(apigatewayUrl + "/users/membership");
+            MembershipDTO membershipDTO = new MembershipDTO(paymentRequest.getUserId(), paymentRequest.isSubscribedMembership());
+            return restTemplate.postForEntity(url.toURI(), membershipDTO, Object.class);
+        }
+
+        return response;
+    }
+
+    private ResponseEntity<?> callPaymentMethod(String method, PaymentDTO paymentDTO) throws MalformedURLException, URISyntaxException {
+
+        //OVDE TREBA DA BUDE SWITCH, za svaku metodu placanja, treba pozivati slicno
+//        if(method == "PAYPAL"){
+            URL url = new URL(apigatewayUrl + "/paypal");
+            return restTemplate.postForEntity(url.toURI(), paymentDTO, Object.class);
+//        } else {
+
+
+//            case "CREDIT CARD":
+//            {
+//                return new ResponseEntity<>(HttpStatus.OK);
+//            }
+//            case "QR CODE":
+//            {
+//                return new ResponseEntity<>(HttpStatus.OK);
+//            }
+//            default: //bitcoin
+//            {
+//                return new ResponseEntity<>(HttpStatus.OK);
+//
+    }
+
 }

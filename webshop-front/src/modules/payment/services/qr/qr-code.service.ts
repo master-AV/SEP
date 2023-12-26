@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ConfigService} from "../../../shared/service/config-service/config.service";
-import {PaymentRequest} from "../../model/payment-request";
 import {Message} from "../../model/message";
 
 @Injectable({

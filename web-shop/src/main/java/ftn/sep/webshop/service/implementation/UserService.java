@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static ftn.sep.webshop.util.Constants.SALT_LENGTH;
@@ -88,5 +89,16 @@ public class UserService implements IUserService {
     @Override
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public void updateMembership(Long userId, boolean subscription) throws EntityNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
+        user.setExpiresMembership(LocalDateTime.now());
+        System.out.println(userId);
+        System.out.println(user.getExpiresMembership());
+        save(user);
+        //subscription
     }
 }
