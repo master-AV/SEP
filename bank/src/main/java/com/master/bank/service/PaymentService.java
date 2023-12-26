@@ -22,12 +22,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.security.sasl.AuthenticationException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -67,9 +67,11 @@ public class PaymentService {
 
     public PaymentInfoDTO requestPayment(PaymentURLRequestDTO requestDTO) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    requestDTO.getMerchantId(), requestDTO.getMerchantPassword()));
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                    cryptoService.encrypt(requestDTO.getMerchantId()), cryptoService.encrypt(requestDTO.getMerchantPassword())));
             SalesAccount salesAccount = salesAccountRepository.findByMerchantId(cryptoService.encrypt(requestDTO.getMerchantId()));
+            if (!salesAccount.getMerchantPassword().equals(cryptoService.encrypt(requestDTO.getMerchantPassword())))
+                throw new AuthenticationException("Merchant can not be authentificated");
             PaymentInformation paymentInformation = new PaymentInformation(salesAccount, requestDTO.getAmount(), requestDTO.getMerchantOrderId());
             this.paymentInformationRepository.save(paymentInformation);
             PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURL(), paymentInformation, requestDTO.getMerchantOrderId());
@@ -122,6 +124,9 @@ public class PaymentService {
             EndPaymentDTO e = new EndPaymentDTO();
             e.setTransactionState(TransactionState.ERROR);
             return e;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
         }
     }
 
