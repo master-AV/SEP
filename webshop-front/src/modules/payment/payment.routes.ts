@@ -6,7 +6,7 @@ import { RoleGuard } from "../auth/guards/role/role.guard";
 
 export const PaymentRoutes: Routes = [
   {
-    path: '',
+    path: 'payment/payment-method/:id/:checked',
     pathMatch: 'full',
     component: ChoosePaymentMethodComponent,
     canActivate: [RoleGuard],
@@ -20,7 +20,7 @@ export const PaymentRoutes: Routes = [
     data: { expectedRoles: 'ROLE_USER' }
   },
   {
-    path: 'subscribed',
+    path: 'payment-method/subscribed',
     pathMatch: 'full',
     component: PaymentMethodSubscribeComponent,
     canActivate: [RoleGuard],

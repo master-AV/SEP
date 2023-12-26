@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log('intercept');
+    console.log('intercept', sessionStorage.getItem("token"));
     request = request.clone({
       withCredentials: true,
       setHeaders: {

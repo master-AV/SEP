@@ -53,6 +53,9 @@ export class ConfigService {
   //PAY
   CC_PAY_URL = `${this.API_URL}/cc/pay`;
 
+  //PSP
+  PSP_URL = `${this.API_URL}/payment`;
+
   getPaymentIdUrl(id: number){
     return `${this.CC_URL}/payment/${id}`;
   }

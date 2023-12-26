@@ -11,7 +11,7 @@ import { AuthService } from 'src/modules/auth/service/auth/auth.service';
 export class HomeComponent implements OnInit {
   loggedUser:User;
   authSubscription: Subscription;
-
+  isCheckedSubscription = false;
   constructor(private router: Router, private authService: AuthService) { }
 
 
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   }
 
   payFee(){
-    this.router.navigate(["/psp/payment/id=0"]);
+    this.router.navigate([`/psp/payment/payment-method/0/${this.isCheckedSubscription}`]);
   }
 
 }

@@ -19,4 +19,5 @@ public interface IUserService {
     boolean checkIfUserAlreadyExists(String email);
     boolean activate(String verifyId, String securityCode) throws EntityNotFoundException, WrongVerifyTryException;
     User save(User user);
+    void updateMembership(Long userId, boolean subscription) throws EntityNotFoundException;
 }

@@ -27,10 +27,8 @@ public class PayPalService implements IPayPalService {
     private String mode;
 
     @Override
-    public Map<String, String> createPayment(Long userId, Long offerId, boolean yearly) throws PayPalPaymentException {
-        double price = getPrice(offerId, yearly);
-        System.out.println(offerId);
-        Amount amount = createAmount(200);
+    public Map<String, String> createPayment(Long userId, double price) throws PayPalPaymentException {
+        Amount amount = createAmount(price);
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(createTransaction(amount));
 
@@ -40,16 +38,6 @@ public class PayPalService implements IPayPalService {
 
         return createResponse(payment);
     }
-
-    private double getPrice(Long offerId, boolean yearly) {
-        System.out.println(offerId);
-        String url = String.format("http://localhost:8080/offers/%d", offerId);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<OfferResponse> offerResponse = restTemplate.getForEntity(url, OfferResponse.class);
-
-        return yearly ? offerResponse.getBody().getYearlyPrice() : offerResponse.getBody().getMonthlyPrice();
-    }
-
 
     private Payer createPayer() {
         Payer payer = new Payer();

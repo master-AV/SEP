@@ -37,6 +37,7 @@ export class AuthService {
 
 
   setSessionStorage(loginResponse: LoginResponse): void {
+    console.log(loginResponse.token);
     sessionStorage.setItem('token', loginResponse.token);
     sessionStorage.setItem('user', JSON.stringify(loginResponse.user));
     sessionStorage.setItem('email', loginResponse.user.email);

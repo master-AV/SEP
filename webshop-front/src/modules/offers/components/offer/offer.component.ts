@@ -14,7 +14,7 @@ export class OfferComponent {
   constructor(private router: Router){}
 
   clickOnBuy(id: number){
-    this.router.navigate([`/psp/payment/id=${id}`]);
+    this.router.navigate([`/psp/payment/payment-method/${id}/false`]);
     // window.location.href = `http://localhost:4201/psp/payment?id=${id}`;
   }
 }
