@@ -1,0 +1,31 @@
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+}
+
+.form-container {
+    padding: 4rem;
+}
+
+.right-button {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    color: green;
+}
+
+.mat-mdc-checkbox {
+    margin-left: 5rem;
+}
+
+form {
+    width: 90%;
+
+}
+
+.right-button{
+    margin-left: 16rem;
+}
