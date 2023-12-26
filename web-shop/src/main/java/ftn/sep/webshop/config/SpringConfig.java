@@ -1,6 +1,6 @@
-package com.sep.id.config;
+package ftn.sep.webshop.config;
 
-import com.sep.id.security.JwtAuthenticationFilter;
+import ftn.sep.webshop.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class SpringConfig {
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/id/**")
+                .requestMatchers("/users/register", "/users/activate-account")
                 .permitAll().anyRequest().authenticated()
                 .and()
                 .authenticationProvider(authenticationProvider)

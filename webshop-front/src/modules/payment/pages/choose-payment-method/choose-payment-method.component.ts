@@ -14,6 +14,7 @@ import {QrCodeService} from "../../services/qr/qr-code.service";
 })
 export class ChoosePaymentMethodComponent {
   id: number;
+  checked: boolean;
 
   paymentMethods = [
     {
@@ -36,9 +37,10 @@ export class ChoosePaymentMethodComponent {
 
   ngOnInit() {
     // Accessing URL parameter using ActivatedRoute
-    this.route.queryParamMap.subscribe(params => {
-      this.id = +params.get('id');
-      console.log('ID:', this.id); // Use the retrieved parameter value
+    this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.checked = params['checked'];
+      // Use the retrieved parameter value
     });
   }
 
@@ -59,7 +61,7 @@ export class ChoosePaymentMethodComponent {
       userId: 1,
       offerId: this.id,
       method: methodName,
-      subscribedMembership: false
+      subscribedMembership: this.checked
     };
     this.paymentService.payment(paymentRequest).subscribe(
       response => {

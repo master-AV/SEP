@@ -7,8 +7,11 @@
         <h2 *ngIf="showScreen() === 'EXTEND'">
             Your membership fee is expired. You have to pay membership fee again.
         </h2>
-        <button mat-raised-button *ngIf="showScreen() === 'BUY' || showScreen() === 'EXTEND'" (click)="payFee()">
-            PAY
-        </button>
+        <div class="row">
+            <mat-slide-toggle [(ngModel)]="isCheckedSubscription">yearly subscription</mat-slide-toggle>
+            <button mat-raised-button *ngIf="showScreen() === 'BUY' || showScreen() === 'EXTEND'" (click)="payFee()">
+                PAY
+            </button>
+        </div>
     </div>
 </div>

@@ -35,6 +35,8 @@ public class User {
     private Role role;
     @Column(name="expires_membership")
     private LocalDateTime expiresMembership;
+    @Column(name="yearly_subscription")
+    private boolean yearlySubscription;
 
     public User(String name, String surname, String email, boolean verified, String password, Role role) {
         this.name = name;
@@ -44,5 +46,6 @@ public class User {
         this.password = password;
         this.role = role;
         this.expiresMembership = null;
+        this.yearlySubscription = false;
     }
 }

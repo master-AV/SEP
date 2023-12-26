@@ -9,6 +9,7 @@ import ftn.sep.webshop.service.interfaces.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class UserController {
 
     @PostMapping("/membership")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void updateMembership(@RequestBody MembershipDTO membershipDTO) throws EntityNotFoundException {
         userService.updateMembership(membershipDTO.getUserId(), membershipDTO.isSubscription());
     }

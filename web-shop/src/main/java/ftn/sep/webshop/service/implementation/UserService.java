@@ -96,9 +96,7 @@ public class UserService implements IUserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new);
         user.setExpiresMembership(LocalDateTime.now());
-        System.out.println(userId);
-        System.out.println(user.getExpiresMembership());
+        user.setYearlySubscription(subscription);
         save(user);
-        //subscription
     }
 }

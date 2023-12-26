@@ -4,7 +4,7 @@ import {PaySuccessComponent} from "./pages/payment-state/pay-success.component";
 
 export const PaymentRoutes: Routes = [
   {
-    path: 'payment/payment-method/:id',
+    path: 'payment/payment-method/:id/:checked',
     pathMatch: 'full',
     component: ChoosePaymentMethodComponent
   },

@@ -27,12 +27,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private VerificationService verificationService;
-
-    @Autowired
-    private UserService userService;
-
     @PostMapping(path="/login")
     @ResponseStatus(HttpStatus.OK)
     public LoginResponse login(@Valid @RequestBody final LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) throws UserLockedException, InvalidCredsException, EntityNotFoundException {
@@ -44,18 +38,5 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public void logout(final HttpServletRequest request) {
         authService.logout(request);
-    }
-
-
-    @PostMapping("/send-code-again")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Valid @NotNull(message = WRONG_VERIFY_HASH) @RequestBody String verifyHash) throws EntityNotFoundException, MailCannotBeSentException, IOException, EntityNotFoundException, MailCannotBeSentException {
-        this.verificationService.generateNewSecurityCode(verifyHash);
-    }
-
-    @PutMapping("/activate-account")
-    @ResponseStatus(HttpStatus.OK)
-    public boolean update(@Valid @RequestBody VerifyRequest verifyRequest) throws EntityNotFoundException, WrongVerifyTryException, WrongVerifyTryException {
-        return userService.activate(verifyRequest.getVerifyId(), verifyRequest.getSecurityCode());
     }
 }
