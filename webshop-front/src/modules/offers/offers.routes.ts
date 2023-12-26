@@ -8,7 +8,7 @@ export const OffersRoutes: Routes = [
         pathMatch: 'full',
         component: HomeComponent,
         canActivate: [RoleGuard],
-        data: { expectedRoles: 'ROLE_ADMIN|ROLE_USER' }
+        data: { expectedRoles: 'ROLE_USER' }
     } 
 
 ]

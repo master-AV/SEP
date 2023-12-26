@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../service/auth/auth.service';
 import { ConfirmPinRequest } from '../../model/confirm-pin-request/confirm-pin-request';
 import {LoginResponse} from "../../model/login/login-response";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    // private toast: ToastrService,
+    private toast: ToastrService,
   ) {
 
     this.loginForm = new FormGroup({
@@ -66,9 +67,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         userResponse => {
           this.authService.setSessionStorage(userResponse);
           this.user = userResponse;
+          this.showSpiner = false;
+          console.log(userResponse);
           if(userResponse.user.role.roleName === 'ROLE_USER'){
+            console.log('e');
             this.router.navigate([`/offers`]);
           } else {
+            console.log('router');
             this.router.navigate([`/psp/subscribed`]);
           }
         },
@@ -77,14 +82,14 @@ export class LoginComponent implements OnInit, OnDestroy {
           console.log(error);
           console.log(error.error);
           if(error.error === "Your account is locked."){
-            // this.toast.error("Your account is locked.", "Locked account");
+            this.toast.error("Your account is locked.", "Locked account");
           }
           else if(error.error === "Your account is locked. You can login again in 24 hours."){
-            // this.toast.error("Your account is locked.", "Locked account");
+            this.toast.error("Your account is locked.", "Locked account");
 
           }
-          else if(error.error === "Invalid creds!" || error.error === "User is not found.") {
-            // this.toast.error('Email or password is not correct!', 'Login failed');
+          else if(error.error === "Invalid credenti!" || error.error === "User is not found.") {
+            this.toast.error('Email or password is not correct!', 'Login failed');
           }
 
           this.showSpiner = false;

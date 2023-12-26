@@ -23,8 +23,8 @@ export const PaymentRoutes: Routes = [
     path: 'subscribed',
     pathMatch: 'full',
     component: PaymentMethodSubscribeComponent,
-    canActivate: [RoleGuard],
-    data: { expectedRoles: 'ROLE_ADMIN' }
+    // canActivate: [RoleGuard],
+    // data: { expectedRoles: 'ROLE_ADMIN' }
   },
   // {
   //   path: 'cc',
