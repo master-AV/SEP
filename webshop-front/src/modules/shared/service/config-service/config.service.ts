@@ -60,4 +60,9 @@ export class ConfigService {
     return `${this.CC_URL}/payment/${id}`;
   }
 
+    //PAYMENT METHOD
+    PAYMENT_METHOD_URL = `${this.API_URL}/payment-method`;
+    SUBSCRIBED_PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_URL}/subscribed`;
+    UPDATE_SUBSCRIBED_PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_URL}/subscribed/update`;
+
 }

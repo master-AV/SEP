@@ -66,7 +66,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         userResponse => {
           this.authService.setSessionStorage(userResponse);
           this.user = userResponse;
-          this.router.navigate([`/offers`]);
+          if(userResponse.user.role.roleName === 'ROLE_USER'){
+            this.router.navigate([`/offers`]);
+          } else {
+            this.router.navigate([`/psp/subscribed`]);
+          }
         },
         error => {
           console.log("err");
