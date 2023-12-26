@@ -1,10 +1,12 @@
 package com.master.bank.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.master.bank.dto.*;
 import com.master.bank.exception.NonExistentAccountException;
 import com.master.bank.exception.NotValidPaymentException;
 import com.master.bank.exception.NotValidPaymentRequestException;
+import com.master.bank.exception.NotValidQRCodeException;
 import com.master.bank.model.Account;
 import com.master.bank.model.PaymentInformation;
 import com.master.bank.model.SalesAccount;
@@ -23,7 +25,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -101,6 +102,11 @@ public class PaymentService {
         PaymentInformation paymentInfo = paymentInformationRepository.findByPaymentId(cardDTO.getPaymentId())
                 .orElse(null);
         try {
+            if (cardDTO instanceof QRCardDTO){
+                String qr = ((QRCardDTO) cardDTO).getMerchantInformation();
+                if (validate(qr, paymentInfo))
+                    throw new NotValidQRCodeException("QR is not valid");
+            }
             if (!this.accountService.checkCardInfoValidity(cardDTO))
                 throw new NotValidPaymentException("Payment is not valid");
             Account buyerAccount = accountService.getAccountByPAN(cryptoService.encrypt(cardDTO.getPAN()));//
@@ -112,7 +118,30 @@ public class PaymentService {
             return this.endPayment(paymentInfo, generateIdNumber10(), LocalDateTime.now(), state);
         }catch (NonExistentAccountException existentAccountException){
             return sendRequestToPCC(cardDTO, paymentInfo.getAmount());
+        }catch (NotValidQRCodeException exception){
+            EndPaymentDTO e = new EndPaymentDTO();
+            e.setTransactionState(TransactionState.ERROR);
+            return e;
         }
+    }
+
+    private boolean validate(String qr, PaymentInformation paymentInformation) {
+        if (paymentInformation == null) return false;
+        try {
+            String dto = QRCodeGenerator.decodeQR(qr);
+            System.out.println(dto);
+
+            Gson gson = new Gson();
+            QRMerchantDTO merchantDTO = gson.fromJson(dto, QRMerchantDTO.class);
+
+            if (paymentInformation.getAmount() == merchantDTO.getAmount() &&
+                    cryptoService.encrypt(merchantDTO.getRecipientPAN()).equals(paymentInformation.getAccount().getAccount().getPAN())
+                    && cryptoService.encrypt(merchantDTO.getRecipientName()).equals(paymentInformation.getAccount().getAccount().getCardHolderName()))
+                return true;
+        }catch (Exception ex){
+            return false;
+        }
+        return false;
     }
 
     public EndPaymentDTO startPaymentFromPCC(CardDTO cardDTO, double amount) {
