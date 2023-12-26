@@ -4,6 +4,6 @@
         <div *ngFor="let pm of paymentMethods">
             <mat-checkbox [formControlName]="pm.name">{{ pm.name }}</mat-checkbox>
         </div><br/><br/>
-        <button type="submit" mat-raised-button class="right-button" [disabled]="!checkboxForm.dirty || !haveCheckedBoxes()">Potvrdi</button>
+        <button type="submit" mat-raised-button class="right-button" [disabled]="!checkboxForm.dirty || !haveCheckedBoxes()" (click)="onSubmit()">Potvrdi</button>
     </form>
 </div>

@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.router.navigate([`/offers`]);
           } else {
             console.log('router');
-            this.router.navigate([`/psp/subscribed`]);
+            this.router.navigate([`/psp/payment-method/subscribed`]);
           }
         },
         error => {
