@@ -8,13 +8,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class AppConfig implements WebMvcConfigurer {
     private static final long MAX_AGE_SECS = 3600;
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4201")
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(MAX_AGE_SECS);
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("http://localhost:4201")
+//                .allowedMethods("*")
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(MAX_AGE_SECS);
+//    }
 }

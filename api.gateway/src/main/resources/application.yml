@@ -35,11 +35,6 @@ spring:
           #localhost:8443/
           predicates:
             - Path=/payment/**
-        - id: psp-payment-method
-          uri: http://localhost:8443/ #lb://psp
-          #localhost:8443/
-          predicates:
-            - Path=/payment-method/**
         - id: web-users
           uri: http://localhost:8081/
           predicates:
@@ -53,9 +48,9 @@ spring:
           predicates:
             - Path=/id/** #http://localhost:8443/
         - id: paypal
-          uri: http://localhost:8083
+          uri: http://localhost:8083/
           predicates:
-            - Path=/paypal/**
+            - Path=/paypal
 
   jpa:
     open-in-view: false
