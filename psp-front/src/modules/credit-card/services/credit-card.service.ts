@@ -23,10 +23,11 @@ export class CreditCardService {
     var uri: string = `${this.API_PATH}/pay`
     console.log(uri);
     console.log(cc);
-    return this.httpClient.post<any>(uri, cc,  { observe: 'response' ,
-      withCredentials: true,
+    return this.httpClient.post<any>(uri, cc,
+      { observe: 'response' ,
+      // withCredentials: true,
       headers: {
-        'Origin': 'http://localhost:4201' // Your front-end URL})
+        // 'Origin': 'http://localhost:4201' // Your front-end URL})
       }
     })
 
