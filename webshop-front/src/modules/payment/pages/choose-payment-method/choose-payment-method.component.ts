@@ -14,7 +14,24 @@ export class ChoosePaymentMethodComponent {
   id: number;
   checked: boolean;
 
-  paymentMethods = [];
+  paymentMethods = [
+    {
+      name: 'CREDIT CARD',
+      img: './assets/credit-card.png'
+    },
+    {
+      name: 'QR CODE',
+      img: './assets/qr-code.png'
+    },
+    {
+      name: 'PAYPAL',
+      img: './assets/paypal.png'
+    },
+    {
+      name: 'BITCOIN',
+      img: './assets/bitcoin.png'
+    }
+    ];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -44,13 +61,17 @@ export class ChoosePaymentMethodComponent {
   clickOnPayment(methodName: string){
     const paymentRequest: PaymentRequest = {
       userId: 1,
-      offerId: this.id,      
+      offerId: this.id,
       method: methodName,
       subscribedMembership: this.checked
     };
     this.paymentService.payment(paymentRequest).subscribe(response => {
       console.log(response);
-      window.location.href = response.redirectUrl;
+      if (methodName == "CREDIT CARD")
+            window.location.href = response.headers.get('Location')
+      else if (methodName == "QR CODE")
+        this.qrCodePayment(response, paymentRequest.userId)
+      window.location.href = response.body.redirectUrl;
     },
       error => {
               this.toast.error(
@@ -86,13 +107,13 @@ export class ChoosePaymentMethodComponent {
   //   )
   // }
 
-  // private qrCodePayment(paymentRequest: PaymentRequest) {
-  //   this.qrService.toPaymentMethod(this.id).subscribe(response => {
-  //     console.log(response);
-  //     localStorage.setItem('qrCode', response['body']['qrCode']);
-  //     localStorage.setItem('userId', String(paymentRequest.userId));
-  //     window.location.href = response.headers.get('Location')
-  //   });
-  // }
+  private qrCodePayment(response, userId) {
+    localStorage.setItem('qrCode', response['body']['qrCode']);
+    localStorage.setItem('userId', String(userId));
+    window.location.href = response.headers.get('Location')
+    // this.qrService.toPaymentMethod(this.id).subscribe(response => {
+    //   console.log(response);
+    // });
+  }
 
 }

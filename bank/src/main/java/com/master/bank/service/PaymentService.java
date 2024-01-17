@@ -142,7 +142,7 @@ public class PaymentService {
             if (paymentInformation.getAmount() == merchantDTO.getAmount() &&
                     cryptoService.encrypt(merchantDTO.getRecipientPAN()).equals(paymentInformation.getAccount().getAccount().getPAN())
                     && cryptoService.encrypt(merchantDTO.getRecipientName()).equals(paymentInformation.getAccount().getAccount().getCardHolderName()))
-                return true;
+                return false;
         }catch (Exception ex){
             return false;
         }

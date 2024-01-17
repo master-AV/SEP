@@ -75,7 +75,7 @@ public class PaymentService implements IPaymentService {
         double amount = getPriceOfService(Long.valueOf(serviceId));
         System.out.println("Price: " + amount);
         Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
-        return new PaymentUrlDTO(amount, webshop.getMerchantId(), webshop.getMerchantPassword());
+        return null; //new PaymentUrlDTO(amount, webshop.getMerchantId(), webshop.getMerchantPassword());
     }
 
     private double getPriceOfService(Long serviceId) {
@@ -136,20 +136,19 @@ public class PaymentService implements IPaymentService {
     private ResponseEntity<?> callPaymentMethod(String method, PaymentDTO paymentDTO) throws MalformedURLException, URISyntaxException {
 
         //OVDE TREBA DA BUDE SWITCH, za svaku metodu placanja, treba pozivati slicno
-//        if(method == "PAYPAL"){
+        if(method.equals("PAYPAL")){
             URL url = new URL(apigatewayUrl + "/paypal");
             return restTemplate.postForEntity(url.toURI(), paymentDTO, Object.class);
-//        } else {
-
-
-//            case "CREDIT CARD":
-//            {
-//                return new ResponseEntity<>(HttpStatus.OK);
-//            }
-//            case "QR CODE":
-//            {
-//                return new ResponseEntity<>(HttpStatus.OK);
-//            }
+        } else if (method.equals("CREDIT CARD")) {
+            Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
+            URL url = new URL(apigatewayUrl + "/credit-card/request");
+            return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
+        }else if (method.equals("QR CODE")) {
+            Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
+            URL url = new URL(apigatewayUrl + "/qr-code/request");
+            return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
+        }
+        return null;
 //            default: //bitcoin
 //            {
 //                return new ResponseEntity<>(HttpStatus.OK);

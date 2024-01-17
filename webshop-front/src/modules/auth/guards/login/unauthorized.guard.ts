@@ -18,5 +18,4 @@ export class UnauthorizedGuard implements CanActivate {
 
     return true;
   }
-  
 }

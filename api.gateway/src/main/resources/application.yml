@@ -51,6 +51,15 @@ spring:
           uri: http://localhost:8083/
           predicates:
             - Path=/paypal
+        - id: credit-card
+          uri: http://localhost:8999/
+          predicates:
+            - Path=/credit-card/**
+        - id: qr-code
+          uri: http://localhost:8085/ #lb://psp
+          #localhost:8443/
+          predicates:
+            - Path=/qr-code/**
 
   jpa:
     open-in-view: false
@@ -65,7 +74,7 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/web-shop-db
     username: postgres
-    password: admin
+    password: ftn
   sql.init:
     platform: postgres
     mode: always
