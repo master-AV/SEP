@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("qr-code")
+@RequestMapping("/qr-code")
 @CrossOrigin("http://localhost:4201")
 public class QRController {
 

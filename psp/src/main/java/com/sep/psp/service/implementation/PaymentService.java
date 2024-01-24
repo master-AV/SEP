@@ -142,6 +142,7 @@ public class PaymentService implements IPaymentService {
         } else if (method.equals("CREDIT CARD")) {
             Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
             URL url = new URL(apigatewayUrl + "/credit-card/request");
+            System.out.println(url.toString());
             return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
         }else if (method.equals("QR CODE")) {
             Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
