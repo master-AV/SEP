@@ -1,5 +1,6 @@
 package com.master.bank.service;
 
+import ch.qos.logback.core.joran.sanity.Pair;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.master.bank.dto.*;
@@ -13,7 +14,6 @@ import com.master.bank.model.SalesAccount;
 import com.master.bank.model.TransactionState;
 import com.master.bank.repository.PaymentInformationRepository;
 import com.master.bank.repository.SalesAccountRepository;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -21,7 +21,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -251,7 +250,7 @@ public class PaymentService {
             this.paymentInformationRepository.save(paymentInformation);
             PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURLRQ(), paymentInformation, requestDTO.getMerchantOrderId());
             System.out.println("Bank - servis - arrived");
-            return new Pair(p, qrCode);
+            return new Pair<PaymentInfoDTO, String>(p, qrCode);
         }catch (AuthenticationException aut){
             System.out.println("Bank - servis - auth ex");
             throw new NotValidPaymentRequestException("Payment parameters are not valid", generateFailedUrl());
