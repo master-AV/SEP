@@ -8,10 +8,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class PaymentDTO {
+//@NoArgsConstructor
+//@AllArgsConstructor
+public class PaymentDTO extends ftn.sep.dto.PaymentDTO {
+    public PaymentDTO(Long userId, double price) {
+        this.userId = userId;
+        this.price = price;
+    }
 
-    private Long userId;
-    private double price;
+//    private Long userId;
+//    private double price;
 }

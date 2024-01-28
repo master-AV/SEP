@@ -1,8 +1,10 @@
 package com.sep.psp.service;
 
 import com.sep.psp.repository.AccountInformationRepository;
+import com.sep.psp.repository.WalletInformationRepository;
 import com.sep.psp.repository.WebshopRepository;
 import ftn.sep.db.AccountInformation;
+import ftn.sep.db.WalletInformation;
 import ftn.sep.db.Webshop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class EncryptionService {
     CryptoService cryptoService;
     @Autowired
     private WebshopRepository webshopRepository;
+
+    @Autowired
+    private WalletInformationRepository walletInformationRepository;
 
     public void encryptAccountInformation(){
         List<AccountInformation> accounts = accountRepository.findAll();
@@ -69,5 +74,20 @@ public class EncryptionService {
         accountInformation.setCardHolderName(cryptoService.encrypt(accountInformation.getCardHolderName()));
         accountInformation.setExpirationDate(cryptoService.encrypt(accountInformation.getExpirationDate()));
         return accountInformation;
+    }
+
+    public void encryptWalletInformation() {
+        List<WalletInformation> accounts = walletInformationRepository.findAll();
+        for (WalletInformation wallet : accounts){
+            wallet.setAccountId(cryptoService.encrypt(wallet.getAccountId()));
+            wallet.setAccountKey(cryptoService.encrypt(wallet.getAccountKey()));
+            walletInformationRepository.save(wallet);
+        }
+    }
+
+    public WalletInformation encryptWalletInformation(WalletInformation walletInformation) {
+        walletInformation.setAccountId(cryptoService.encrypt(walletInformation.getAccountId()));
+        walletInformation.setAccountKey(cryptoService.encrypt(walletInformation.getAccountKey()));
+        return walletInformation;
     }
 }

@@ -28,6 +28,7 @@ public class DatabaseInitializedListener implements ApplicationListener<ContextR
         System.out.println("Running custom logic after database initialization...");
         encryptAccountsService.encryptAccountInformation();
         encryptAccountsService.encryptWebshops();
+        encryptAccountsService.encryptWalletInformation();
         // Your custom logic here
     }
 }

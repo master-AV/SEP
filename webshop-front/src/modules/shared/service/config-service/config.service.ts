@@ -55,6 +55,7 @@ export class ConfigService {
 
   //PSP
   PSP_URL = `${this.API_URL}/payment`;
+  PSP_WALLET_URL = `${this.API_URL}/payment/add-wallet`;
 
   getPaymentIdUrl(id: number){
     return `${this.CC_URL}/payment/${id}`;

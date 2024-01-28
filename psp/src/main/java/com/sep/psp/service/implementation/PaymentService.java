@@ -7,13 +7,17 @@ import com.sep.psp.dto.PaymentUrlDTO;
 
 import com.sep.psp.dto.request.PaymentRequest;
 import com.sep.psp.repository.AccountInformationRepository;
+import com.sep.psp.repository.WalletInformationRepository;
 import com.sep.psp.repository.WebshopRepository;
 import com.sep.psp.service.CryptoService;
 import com.sep.psp.service.EncryptionService;
 import com.sep.psp.service.interfaces.IPaymentService;
 import ftn.sep.db.AccountInformation;
+import ftn.sep.db.WalletInformation;
 import ftn.sep.db.Webshop;
+import ftn.sep.dto.BPaymentDTO;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -120,7 +124,7 @@ public class PaymentService implements IPaymentService {
         if(paymentRequest.getOfferId() == 0L) {
             price = MEMBERSHIP_PRICE;
         } else {
-            price = getPriceOfService(paymentRequest.getOfferId());
+            price = 100;//getPriceOfService(paymentRequest.getOfferId());
         }
         PaymentDTO paymentDTO = new PaymentDTO(paymentRequest.getUserId(), price);
         ResponseEntity<?> response = callPaymentMethod(paymentRequest.getMethod(), paymentDTO);
@@ -133,14 +137,28 @@ public class PaymentService implements IPaymentService {
         return response;
     }
 
+    @Autowired
+    private WalletInformationRepository walletInformationRepository;
     private ResponseEntity<?> callPaymentMethod(String method, PaymentDTO paymentDTO) throws MalformedURLException, URISyntaxException {
 
         //OVDE TREBA DA BUDE SWITCH, za svaku metodu placanja, treba pozivati slicno
-//        if(method == "PAYPAL"){
+        if(method.equals("PAYPAL")){
             URL url = new URL(apigatewayUrl + "/paypal");
             return restTemplate.postForEntity(url.toURI(), paymentDTO, Object.class);
-//        } else {
-
+        } else if (method.equals("BITCOIN")){
+            URL url = new URL("http://localhost:8084" + "/bitcoin");
+            Webshop webshop = webshopRepository.findById(2L).orElseThrow(()-> new NotFoundException());
+            WalletInformation walletInformation = walletInformationRepository.findByUserId(paymentDTO.getUserId()).orElse(null);
+            BPaymentDTO bitcoinDTO = null;
+            if (walletInformation != null)
+                bitcoinDTO = new BPaymentDTO(paymentDTO,
+                        cryptoService.decrypt(webshop.getMerchantId()), cryptoService.decrypt(webshop.getMerchantPassword()),
+                        cryptoService.decrypt(walletInformation.getAccountId()), cryptoService.decrypt(walletInformation.getAccountKey()));
+            else
+                bitcoinDTO = new BPaymentDTO(paymentDTO, null, null, null, null);
+            return restTemplate.postForEntity(url.toURI(), bitcoinDTO, Object.class);
+        }
+        return null;
 
 //            case "CREDIT CARD":
 //            {

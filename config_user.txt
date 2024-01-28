@@ -1,0 +1,2 @@
+git config user.name "VioletaSW32"
+git config user.email "erdelji.sw32.2019@uns.ac.rs"
