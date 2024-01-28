@@ -2,10 +2,8 @@ package com.sep.psp.service.implementation;
 
 import com.sep.psp.dto.MembershipDTO;
 import com.sep.psp.dto.PaymentDTO;
-import com.sep.psp.dto.QRCardDTO;
 import com.sep.psp.dto.PaymentUrlDTO;
-
-import com.sep.psp.dto.request.PaymentRequest;
+import com.sep.psp.dto.QRCardDTO;
 import com.sep.psp.repository.AccountInformationRepository;
 import com.sep.psp.repository.WebshopRepository;
 import com.sep.psp.service.CryptoService;
@@ -13,6 +11,8 @@ import com.sep.psp.service.EncryptionService;
 import com.sep.psp.service.interfaces.IPaymentService;
 import ftn.sep.db.AccountInformation;
 import ftn.sep.db.Webshop;
+import ftn.sep.dto.request.PaymentRequest;
+import ftn.sep.dto.request.TransactionRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 import static com.sep.psp.utils.Constants.MEMBERSHIP_PRICE;
 
@@ -125,9 +126,12 @@ public class PaymentService implements IPaymentService {
         PaymentDTO paymentDTO = new PaymentDTO(paymentRequest.getUserId(), price);
         ResponseEntity<?> response = callPaymentMethod(paymentRequest.getMethod(), paymentDTO);
         if(paymentRequest.getOfferId() == 0L && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)){
-            URL url = new URL(apigatewayUrl + "/users/membership");
+            TransactionRequest transactionRequest = new TransactionRequest(LocalDateTime.now(), paymentRequest.getOfferId(), paymentRequest.getMethod(), paymentRequest.getUserId());
+            URL url_transaction = new URL(apigatewayUrl + "/users/transaction");
+            restTemplate.postForEntity(url_transaction.toURI(), transactionRequest, Object.class);
+            URL url_membership = new URL(apigatewayUrl + "/users/membership");
             MembershipDTO membershipDTO = new MembershipDTO(paymentRequest.getUserId(), paymentRequest.isSubscribedMembership());
-            return restTemplate.postForEntity(url.toURI(), membershipDTO, Object.class);
+            return restTemplate.postForEntity(url_membership.toURI(), membershipDTO, Object.class);
         }
 
         return response;

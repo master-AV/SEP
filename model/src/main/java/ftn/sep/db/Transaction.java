@@ -1,8 +1,5 @@
 package ftn.sep.db;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import ftn.sep.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +7,6 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name="transactions")
@@ -24,18 +20,19 @@ public class Transaction {
     private Long id;
     @Column(name="paid_date")
     private LocalDateTime paidDate;
-    @Column(name="yearly")
-    private boolean yearly;// if yearly - true if monthly - false
-    @ManyToMany
-    @JoinTable(
-            name="transactions_offers",
-            joinColumns = @JoinColumn(name="transaction_id"),
-            inverseJoinColumns = @JoinColumn(name="offer_id"))
-    private List<Offer> offers;
-    @Column(name="payment_type")
-    private PaymentType paymentType;
+    @OneToOne
+    @JoinColumn(name = "offer_id", referencedColumnName = "id")
+    private Offer offer;
+    @Column(name="payment_method")
+    private String paymentMethod;
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    public Transaction(LocalDateTime paidDate, Offer offer, String paymentMethod, User user) {
+        this.paidDate = paidDate;
+        this.offer = offer;
+        this.paymentMethod = paymentMethod;
+        this.user = user;
+    }
 }

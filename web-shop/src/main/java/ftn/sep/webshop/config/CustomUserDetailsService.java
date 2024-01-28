@@ -3,7 +3,7 @@ package ftn.sep.webshop.config;
 import ftn.sep.webshop.dto.response.UserResponse;
 import ftn.sep.webshop.exception.EntityNotFoundException;
 import ftn.sep.webshop.security.UserPrinciple;
-import ftn.sep.webshop.service.implementation.UserService;
+import ftn.sep.webshop.service.implementation.UsersService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserService userService;
+    private final UsersService userService;
 
-    public CustomUserDetailsService(UserService userService) {
+    public CustomUserDetailsService(UsersService userService) {
         this.userService = userService;
     }
 

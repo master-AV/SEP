@@ -27,6 +27,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./../credit-card/credit-card.module").then((m) => m.CreditCardModule),
       },
+      {
+        path: "t",
+        loadChildren: () => 
+          import("./../transactions/transactions.module").then((m) => m.TransactionsModule)
+      }
     ]
   },
 ];

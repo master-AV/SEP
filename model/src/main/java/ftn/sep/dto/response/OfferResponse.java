@@ -14,13 +14,11 @@ import lombok.Setter;
 public class OfferResponse {
     private Long id;
     private OfferType type;
-    private double monthlyPrice;
-    private double yearlyPrice;
+    private double price;
 
     public OfferResponse(Offer offer) {
         this.id = offer.getId();
         this.type = offer.getType();
-        this.monthlyPrice = offer.getMonthlyPrice();
-        this.yearlyPrice = offer.getYearlyPrice();
+        this.price = offer.getPrice();
     }
 }

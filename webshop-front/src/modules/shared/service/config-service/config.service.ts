@@ -64,5 +64,9 @@ export class ConfigService {
     PAYMENT_METHOD_URL = `${this.API_URL}/payment-method`;
     SUBSCRIBED_PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_URL}/subscribed`;
     UPDATE_SUBSCRIBED_PAYMENT_METHOD_URL = `${this.PAYMENT_METHOD_URL}/subscribed/update`;
-
+    ///////
+    TRANSACTIONS_URL = `${this.API_URL}/transactions`;
+    getTransactionsUrl(id: number){
+      return `${this.TRANSACTIONS_URL}/${id}`;
+    }
 }

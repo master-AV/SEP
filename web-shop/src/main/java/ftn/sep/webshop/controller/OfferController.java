@@ -1,7 +1,6 @@
 package ftn.sep.webshop.controller;
 
 import ftn.sep.webshop.dto.response.OfferResponse;
-import ftn.sep.webshop.service.implementation.OfferService;
 import ftn.sep.webshop.service.interfaces.IOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,7 @@ public class OfferController {
     @ResponseStatus(HttpStatus.OK)
     public OfferResponse getById(@PathVariable Long id) {
 
-        return offerService.getById(id);
+        return offerService.getResponseById(id);
     }
 
 }

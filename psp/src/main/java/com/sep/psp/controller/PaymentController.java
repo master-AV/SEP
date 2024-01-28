@@ -1,9 +1,9 @@
 package com.sep.psp.controller;
 
 import com.sep.psp.dto.CardDTO;
-import com.sep.psp.dto.request.PaymentRequest;
 import com.sep.psp.service.AccountInformationService;
 import com.sep.psp.service.implementation.PaymentService;
+import ftn.sep.dto.request.PaymentRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

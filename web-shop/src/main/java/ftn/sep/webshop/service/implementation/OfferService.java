@@ -1,6 +1,7 @@
 package ftn.sep.webshop.service.implementation;
 
 import ftn.sep.db.Offer;
+import ftn.sep.enums.OfferType;
 import ftn.sep.webshop.dto.response.OfferResponse;
 import ftn.sep.webshop.repository.OfferRepository;
 import ftn.sep.webshop.repository.UserRepository;
@@ -32,10 +33,18 @@ public class OfferService implements IOfferService {
         return offerRepository.findOfferPriceById(id);
     }
 
-    public OfferResponse getById(Long id) {
-        Offer offer = offerRepository.findById(id)
+    public Offer getById(Long id) {
+        return offerRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
+    }
 
-        return new OfferResponse(offer);
+    public OfferResponse getResponseById(Long id) {
+        return new OfferResponse(getById(id));
+    }
+
+    @Override
+    public Offer getOfferByType(OfferType type) {
+        return offerRepository.findByType(type)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

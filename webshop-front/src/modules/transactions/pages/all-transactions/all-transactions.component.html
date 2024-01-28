@@ -1,0 +1,26 @@
+<div class="tab-content">
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="First">
+            <div class="tab-content">
+                <h1 class="center">Transactions of all users</h1>
+                <app-transactions-table [dataSource]="allTransactions"></app-transactions-table>
+            </div>
+        </mat-tab>
+        <mat-tab label="Second">
+            <div class="tab-content">
+                <h1 class="center">Transactions of selected user</h1>
+                <mat-form-field appearance="fill" class="select">
+                    <mat-label>Choose an user</mat-label>
+                    <mat-select (selectionChange)="changeSelectedUser()" [(value)]="selectedUser">
+                        <mat-option *ngFor="let user of users" [value]="user.id">
+                            {{user.name}} {{user.surname}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <app-transactions-table [dataSource]="transactionsForSelectedUser" *ngIf="transactionsForSelectedUser.length > 0"></app-transactions-table>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+  
+  

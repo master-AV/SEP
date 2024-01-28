@@ -6,20 +6,22 @@ import ftn.sep.db.User;
 import ftn.sep.webshop.dto.response.UserResponse;
 import ftn.sep.webshop.exception.*;
 import ftn.sep.webshop.repository.UserRepository;
-import ftn.sep.webshop.service.interfaces.IUserService;
+import ftn.sep.webshop.service.interfaces.IUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static ftn.sep.webshop.dto.response.UserResponse.formUserResponses;
 import static ftn.sep.webshop.util.Constants.SALT_LENGTH;
 import static ftn.sep.webshop.util.Helper.*;
 
 
 @Service
-public class UserService implements IUserService {
+public class UsersService implements IUsersService {
     @Autowired
     private UserRepository userRepository;
 
@@ -92,11 +94,32 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updateMembership(Long userId, boolean subscription) throws EntityNotFoundException {
+    public void updateMembership(Long userId, boolean subscription, String paymentMethod) throws EntityNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new);
-        user.setExpiresMembership(LocalDateTime.now());
+        user.setExpiresMembership(LocalDateTime.now().plusYears(1));
         user.setYearlySubscription(subscription);
+        if(subscription){
+            user.setPaymentMethod(paymentMethod);
+        }
         save(user);
     }
+
+    @Override
+    public List<UserResponse> getUsersWithExpiredMembership() {
+        return formUserResponses(userRepository.getUsersWithSubscriptionAndExpiredMembership(LocalDateTime.now()));
+    }
+
+    @Override
+    public User getById(Long userId) throws EntityNotFoundException {
+        return userRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public List<UserResponse> getAllWithRoleUser() {
+
+        return formUserResponses(userRepository.findAllWithRoleUser());
+    }
+
 }

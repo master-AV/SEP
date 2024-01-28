@@ -52,7 +52,6 @@ export class PaymentMethodSubscribeComponent {
       this.paymentMethods = response;
       response.forEach(method => {
         formGroupConfig[method.name] = new FormControl(method.subscribed);
-        
       });
       this.checkboxForm = this.fb.group(formGroupConfig);
     });

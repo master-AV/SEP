@@ -25,4 +25,8 @@ export class UserService {
     return this.http.put<boolean>(this.configService.ACTIVATE_ACCOUNT_URL, verifyRequest);
   }
 
+  getAll(): Observable<User[]> {
+    return this.http.get<User[]>(this.configService.USERS_URL);
+  }
+
 }

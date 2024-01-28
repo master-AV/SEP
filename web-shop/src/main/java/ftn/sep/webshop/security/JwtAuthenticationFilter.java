@@ -6,7 +6,7 @@ import ftn.sep.webshop.dto.response.UserResponse;
 import ftn.sep.webshop.exception.EntityNotFoundException;
 import ftn.sep.webshop.exception.FingerprintCookieNotFoundException;
 import ftn.sep.webshop.exception.InvalidJWTException;
-import ftn.sep.webshop.service.implementation.UserService;
+import ftn.sep.webshop.service.implementation.UsersService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -28,9 +28,9 @@ import static ftn.sep.webshop.security.JwtProperties.TOKEN_PREFIX;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final UsersService userService;
 
-    public JwtAuthenticationFilter(UserService userService) {
+    public JwtAuthenticationFilter(UsersService userService) {
         this.userService = userService;
     }
 
