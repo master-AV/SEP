@@ -15,15 +15,23 @@ import com.sep.id.security.UserPrinciple;
 import com.sep.id.service.interfaces.IAuthService;
 import com.sep.id.service.interfaces.IUserService;
 import ftn.sep.db.User;
+import ftn.sep.dto.request.LogRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 @Service
 
@@ -34,6 +42,11 @@ public class AuthService implements IAuthService {
     private EmailService emailService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${apigateway.url}")
+    private String apigatewayUrl;
 
     @Override
     public void logout(HttpServletRequest request) {
@@ -47,13 +60,15 @@ public class AuthService implements IAuthService {
     }
 
     public LoginResponse login(final String email, final String password, final HttpServletRequest request, final HttpServletResponse response)
-            throws UserLockedException, EntityNotFoundException, InvalidCredsException {
+            throws UserLockedException, EntityNotFoundException, InvalidCredsException, MalformedURLException, URISyntaxException {
         Authentication authenticate;
 
         try {
-
             authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (Exception ignored) {
+            LogRequest logRequest = new LogRequest(String.format("User with %s used invalid credentials.", email), LogLevel.INFO);
+            URL log_url = new URL(apigatewayUrl + "/log");
+            restTemplate.postForEntity(log_url.toURI(), logRequest, Object.class);
             throw new InvalidCredsException("Invalid credenti!");
         }
 

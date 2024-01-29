@@ -7,10 +7,16 @@ import com.sep.id.service.interfaces.IUserService;
 import ftn.sep.db.RegistrationVerification;
 import ftn.sep.db.Role;
 import ftn.sep.db.User;
+import ftn.sep.dto.request.LogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Optional;
 
 import static com.sep.id.utils.Constants.SALT_LENGTH;
@@ -26,7 +32,11 @@ public class UserService implements IUserService {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RestTemplate restTemplate;
 
+    @Value("${apigateway.url}")
+    private String apigatewayUrl;
 
     @Override
     public User getVerifiedUser(String email) throws EntityNotFoundException {
@@ -49,12 +59,15 @@ public class UserService implements IUserService {
             String password,
             String confirmPassword,
             String roleName
-    ) throws PasswordsDoNotMatchException, IOException, MailCannotBeSentException, EntityAlreadyExistsException {
+    ) throws PasswordsDoNotMatchException, IOException, MailCannotBeSentException, EntityAlreadyExistsException, URISyntaxException {
         if (passwordsDontMatch(password, confirmPassword)) {
             throw new PasswordsDoNotMatchException();
         }
 
         if (this.checkIfUserAlreadyExists(email)) {
+            LogRequest logRequest = new LogRequest(String.format("User try to register with existed email %s", email), LogLevel.INFO);
+            URL log_url = new URL(apigatewayUrl + "/log");
+            restTemplate.postForEntity(log_url.toURI(), logRequest, Object.class);
             throw new EntityAlreadyExistsException(String.format("User with email %s already exists.", email));
         }
 
@@ -65,7 +78,9 @@ public class UserService implements IUserService {
         String hashedPassword = getHash(password);
         User user = userRepository.save(
                new User(name, surname, email, false, hashedPassword, role));
-
+        LogRequest logRequest = new LogRequest(String.format("New user with email %s registered.", email), LogLevel.INFO);
+        URL log_url = new URL(apigatewayUrl + "/log");
+        restTemplate.postForEntity(log_url.toURI(), logRequest, Object.class);
         return new UserResponse(user);
 
     }

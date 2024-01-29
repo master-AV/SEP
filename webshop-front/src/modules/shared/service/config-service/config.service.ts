@@ -69,4 +69,7 @@ export class ConfigService {
     getTransactionsUrl(id: number){
       return `${this.TRANSACTIONS_URL}/${id}`;
     }
+
+    //////
+    LOG_URL = `${this.API_URL}/log`;
 }

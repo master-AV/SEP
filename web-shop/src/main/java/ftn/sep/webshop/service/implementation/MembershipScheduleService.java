@@ -4,6 +4,7 @@ import ftn.sep.db.Offer;
 import ftn.sep.dto.request.PaymentRequest;
 import ftn.sep.enums.OfferType;
 import ftn.sep.webshop.dto.response.UserResponse;
+import ftn.sep.webshop.service.interfaces.ILogService;
 import ftn.sep.webshop.service.interfaces.IMembershipScheduleService;
 import ftn.sep.webshop.service.interfaces.IOfferService;
 import ftn.sep.webshop.service.interfaces.IUsersService;
@@ -23,6 +24,8 @@ public class MembershipScheduleService implements IMembershipScheduleService {
     private IUsersService userService;
     @Autowired
     private IOfferService offerService;
+    @Autowired
+    private ILogService logService;
     @Autowired
     private RestTemplate restTemplate;
     @Value("${apigateway.url}")

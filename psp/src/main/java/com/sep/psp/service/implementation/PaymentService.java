@@ -11,11 +11,13 @@ import com.sep.psp.service.EncryptionService;
 import com.sep.psp.service.interfaces.IPaymentService;
 import ftn.sep.db.AccountInformation;
 import ftn.sep.db.Webshop;
+import ftn.sep.dto.request.LogRequest;
 import ftn.sep.dto.request.PaymentRequest;
 import ftn.sep.dto.request.TransactionRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -125,6 +127,11 @@ public class PaymentService implements IPaymentService {
         }
         PaymentDTO paymentDTO = new PaymentDTO(paymentRequest.getUserId(), price);
         ResponseEntity<?> response = callPaymentMethod(paymentRequest.getMethod(), paymentDTO);
+        if(response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED){
+            LogRequest logRequest = new LogRequest(String.format("User with id %d has new payment with %s.", paymentRequest.getUserId(), paymentRequest.getMethod()), LogLevel.INFO);
+            URL url_log = new URL(apigatewayUrl + "/log");
+            restTemplate.postForEntity(url_log.toURI(), logRequest, Object.class);
+        }
         if(paymentRequest.getOfferId() == 0L && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)){
             TransactionRequest transactionRequest = new TransactionRequest(LocalDateTime.now(), paymentRequest.getOfferId(), paymentRequest.getMethod(), paymentRequest.getUserId());
             URL url_transaction = new URL(apigatewayUrl + "/users/transaction");
