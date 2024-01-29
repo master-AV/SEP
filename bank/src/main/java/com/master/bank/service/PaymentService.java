@@ -13,7 +13,6 @@ import com.master.bank.model.SalesAccount;
 import com.master.bank.model.TransactionState;
 import com.master.bank.repository.PaymentInformationRepository;
 import com.master.bank.repository.SalesAccountRepository;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +30,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -74,7 +74,7 @@ public class PaymentService {
                 throw new AuthenticationException("Merchant can not be authentificated");
             PaymentInformation paymentInformation = new PaymentInformation(salesAccount, requestDTO.getAmount(), requestDTO.getMerchantOrderId());
             this.paymentInformationRepository.save(paymentInformation);
-            PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURL(), paymentInformation, requestDTO.getMerchantOrderId());
+            PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURL(paymentInformation.getPaymentId()), paymentInformation, requestDTO.getMerchantOrderId());
             System.out.println("Bank - servis - arrived");
             return p;
         }catch (AuthenticationException aut){
@@ -91,8 +91,8 @@ public class PaymentService {
         return environment.getProperty("bank.url.failed");
     }
 
-    private String generatePaymentURL() {
-        return environment.getProperty("bank.url.success");//this.basicURL + "payment/cc";
+    private String generatePaymentURL(String paymentId) {
+        return environment.getProperty("bank.url.success");// + "/" + paymentId;//this.basicURL + "payment/cc";
     }
 
     private String generatePaymentURLRQ() {
@@ -232,8 +232,9 @@ public class PaymentService {
         return new EndPaymentDTO(paymentInformation, acquirerOrderId, acquirerTimestamp, transactionState);
     }
 
-    public Pair<PaymentInfoDTO, String> requestPaymentQR(PaymentURLRequestDTO requestDTO) {
+    public Map<String, Object> requestPaymentQR(PaymentURLRequestDTO requestDTO) {
         try {
+            Map<String, Object> res = new HashMap<>();
 //            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 //                    requestDTO.getMerchantId(), requestDTO.getMerchantPassword()));
             SalesAccount salesAccount = salesAccountRepository.findByMerchantId(cryptoService.encrypt(requestDTO.getMerchantId()));
@@ -251,7 +252,9 @@ public class PaymentService {
             this.paymentInformationRepository.save(paymentInformation);
             PaymentInfoDTO p = new PaymentInfoDTO(generatePaymentURLRQ(), paymentInformation, requestDTO.getMerchantOrderId());
             System.out.println("Bank - servis - arrived");
-            return new Pair(p, qrCode);
+            res.put("PaymentInfoDTO", p);
+            res.put("QRCode", qrCode);
+            return res;
         }catch (AuthenticationException aut){
             System.out.println("Bank - servis - auth ex");
             throw new NotValidPaymentRequestException("Payment parameters are not valid", generateFailedUrl());

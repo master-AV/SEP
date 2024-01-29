@@ -101,7 +101,7 @@ public class PaymentService implements IPaymentService {
         }
     }
 
-    private ResponseEntity<?> startPaymentForQR(int userId, String paymentId, String merchantInformation) {
+    public ResponseEntity<?> startPaymentForQR(int userId, String paymentId, String merchantInformation) {
         AccountInformation acc = accountInformationRepository.findByUserId(userId)
                 .orElseThrow(()-> new EntityNotFoundException("No account information found"));
         QRCardDTO cardDTO = new QRCardDTO(encryptionService.decryptAccountInformation(acc), paymentId, merchantInformation);
@@ -141,12 +141,12 @@ public class PaymentService implements IPaymentService {
             return restTemplate.postForEntity(url.toURI(), paymentDTO, Object.class);
         } else if (method.equals("CREDIT CARD")) {
             Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
-            URL url = new URL(apigatewayUrl + "/credit-card/request");
+            URL url = new URL( "http://localhost:8999"+ "/credit-card/request");
             System.out.println(url.toString());
             return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
         }else if (method.equals("QR CODE")) {
             Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
-            URL url = new URL(apigatewayUrl + "/qr-code/request");
+            URL url = new URL("http://localhost:8085" + "/qr-code/request");
             return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
         }
         return null;

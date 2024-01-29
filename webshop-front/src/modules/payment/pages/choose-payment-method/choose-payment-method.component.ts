@@ -60,7 +60,7 @@ export class ChoosePaymentMethodComponent {
 
   clickOnPayment(methodName: string){
     const paymentRequest: PaymentRequest = {
-      userId: 1,
+      userId: 10,
       offerId: this.id,
       method: methodName,
       subscribedMembership: this.checked
@@ -68,10 +68,16 @@ export class ChoosePaymentMethodComponent {
     this.paymentService.payment(paymentRequest).subscribe(response => {
       console.log(response);
       if (methodName == "CREDIT CARD")
-            window.location.href = response.headers.get('Location')
+      {
+        //console.log(response.headers)
+        //console.log(response.headers.get('Location'))
+        window.location.href = response.headers.get('Location')
+      }
       else if (methodName == "QR CODE")
         this.qrCodePayment(response, paymentRequest.userId)
-      window.location.href = response.body.redirectUrl;
+      else{
+        window.location.href = response.body.redirectUrl;
+      }
     },
       error => {
               this.toast.error(

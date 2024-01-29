@@ -1,5 +1,5 @@
 export interface CardDto {
-  pan: number
+  pan: string
   securityCode: number
   cardHolderName: string
   expirationDate: Date

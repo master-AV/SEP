@@ -1,6 +1,7 @@
 insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money) values ('1123', '123', 'OTP', '2028-03-31', 0, 100000);
 insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money) values ('1542', '123', 'ADIKO', '2029-03-31', 0, 10000);
-insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money) values ('1321', '123', 'Milos Ceca', '2024-03-31', 100, 5000);
+insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money)
+values ('1321', '123', 'Milos Ceca', '2024-03-31', 100, 5000);
 insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money) values ('1322', '123', 'Jovan Ceca', '2024-03-31', 100, 5000);
 -- insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money) values ('k6ZQa1OmyRRqFfLA4/wKCA==', '77SoRnEHFh5al4Pq5/vywQ==', 'OTP', '2028-03-31', 0, 100000);
 -- insert into account(pan, security_code, card_holder_name, expiration_date, reserved_money, available_money) values ('z6wCf1VBtyaLEPMME+5Vrw==', '77SoRnEHFh5al4Pq5/vywQ==', 'ADIKO', '2029-03-31', 0, 10000);
