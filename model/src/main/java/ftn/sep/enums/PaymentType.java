@@ -1,9 +1,8 @@
 package ftn.sep.enums;
 
 public enum PaymentType {
+    PP,
     CC,
     QR,
-    PP,
-    BC;
-
+    BC
 }

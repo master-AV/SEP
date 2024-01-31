@@ -33,13 +33,7 @@ export class ChoosePaymentMethodComponent {
               private paymentMethodService: PaymentMethodService
               ) {
 
-  }
-
-  // creditCardPayment() {
-  //   this.cardService.toPaymentMethod(this.id).subscribe(response => {
-  //     window.location.href = response.headers.get('Location')
-  //   });
-  // }
+              }
 
   clickOnPayment(methodName: string){
     const paymentRequest: PaymentRequest = {

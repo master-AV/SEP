@@ -2,10 +2,8 @@ package com.sep.psp.service.implementation;
 
 import com.sep.psp.dto.MembershipDTO;
 import com.sep.psp.dto.PaymentDTO;
-import com.sep.psp.dto.QRCardDTO;
 import com.sep.psp.dto.PaymentUrlDTO;
-
-import com.sep.psp.dto.request.PaymentRequest;
+import com.sep.psp.dto.QRCardDTO;
 import com.sep.psp.repository.AccountInformationRepository;
 import com.sep.psp.repository.WalletInformationRepository;
 import com.sep.psp.repository.WebshopRepository;
@@ -16,10 +14,14 @@ import ftn.sep.db.AccountInformation;
 import ftn.sep.db.WalletInformation;
 import ftn.sep.db.Webshop;
 import ftn.sep.dto.BPaymentDTO;
+import ftn.sep.dto.request.LogRequest;
+import ftn.sep.dto.request.PaymentRequest;
+import ftn.sep.dto.request.TransactionRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 import static com.sep.psp.utils.Constants.MEMBERSHIP_PRICE;
 
@@ -128,10 +131,18 @@ public class PaymentService implements IPaymentService {
         }
         PaymentDTO paymentDTO = new PaymentDTO(paymentRequest.getUserId(), price);
         ResponseEntity<?> response = callPaymentMethod(paymentRequest.getMethod(), paymentDTO);
+        if(response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED){
+            LogRequest logRequest = new LogRequest(String.format("User with id %d has new payment with %s.", paymentRequest.getUserId(), paymentRequest.getMethod()), LogLevel.INFO);
+            URL url_log = new URL(apigatewayUrl + "/log");
+            restTemplate.postForEntity(url_log.toURI(), logRequest, Object.class);
+        }
         if(paymentRequest.getOfferId() == 0L && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)){
-            URL url = new URL(apigatewayUrl + "/users/membership");
+            TransactionRequest transactionRequest = new TransactionRequest(LocalDateTime.now(), paymentRequest.getOfferId(), paymentRequest.getMethod(), paymentRequest.getUserId());
+            URL url_transaction = new URL(apigatewayUrl + "/users/transaction");
+            restTemplate.postForEntity(url_transaction.toURI(), transactionRequest, Object.class);
+            URL url_membership = new URL(apigatewayUrl + "/users/membership");
             MembershipDTO membershipDTO = new MembershipDTO(paymentRequest.getUserId(), paymentRequest.isSubscribedMembership());
-            return restTemplate.postForEntity(url.toURI(), membershipDTO, Object.class);
+            return restTemplate.postForEntity(url_membership.toURI(), membershipDTO, Object.class);
         }
 
         return response;

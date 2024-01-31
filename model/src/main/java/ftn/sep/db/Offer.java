@@ -20,8 +20,6 @@ public class Offer {
     private Long id;
     @Column(name="offer_type")
     private OfferType type;
-    @Column(name="monthly_price")
-    private double monthlyPrice;
-    @Column(name="yearly_price")
-    private double yearlyPrice;
+    @Column(name="price")
+    private double price;
 }

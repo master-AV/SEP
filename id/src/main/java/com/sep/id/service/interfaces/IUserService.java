@@ -6,6 +6,7 @@ import com.sep.id.exception.*;
 import ftn.sep.db.User;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public interface IUserService {
@@ -17,7 +18,7 @@ public interface IUserService {
             String password,
             String confirmPassword,
             String role
-    ) throws EntityAlreadyExistsException, PasswordsDoNotMatchException, IOException, MailCannotBeSentException;
+    ) throws EntityAlreadyExistsException, PasswordsDoNotMatchException, IOException, MailCannotBeSentException, URISyntaxException;
     boolean checkIfUserAlreadyExists(String email);
     boolean activate(String verifyId, String securityCode) throws EntityNotFoundException, WrongVerifyTryException;
     User save(User user);

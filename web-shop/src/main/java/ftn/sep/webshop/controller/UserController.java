@@ -5,7 +5,7 @@ import ftn.sep.webshop.dto.request.UserRegistrationRequest;
 import ftn.sep.webshop.dto.request.VerifyRequest;
 import ftn.sep.webshop.dto.response.UserResponse;
 import ftn.sep.webshop.exception.*;
-import ftn.sep.webshop.service.interfaces.IUserService;
+import ftn.sep.webshop.service.interfaces.IUsersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +13,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
     @Autowired
-    private IUserService userService;
+    private IUsersService userService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,6 +44,18 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_USER')")
     public void updateMembership(@RequestBody MembershipDTO membershipDTO) throws EntityNotFoundException {
-        userService.updateMembership(membershipDTO.getUserId(), membershipDTO.isSubscription());
+        userService.updateMembership(membershipDTO.getUserId(), membershipDTO.isSubscription(), membershipDTO.getPaymentMethod());
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserResponse> getAll() {
+        return userService.getAllWithRoleUser();
+    }
+
+    @GetMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse getById(@PathVariable Long userId) throws EntityNotFoundException {
+        return new UserResponse(userService.getById(userId));
     }
 }

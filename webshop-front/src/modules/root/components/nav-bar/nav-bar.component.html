@@ -1,8 +1,27 @@
 <mat-toolbar color="accent" class="mat-elevation-z3">
-  <a [routerLink]="['']" routerLinkActive="active">
-    Agencija
+  <a [routerLink]="['/offers']" routerLinkActive="active" *ngIf="loggedUser.role.roleName === 'ROLE_USER'">
+    <img
+      src="./assets/agency.png"
+      alt="MyHome"
+      class="app-icon" />
+  </a>
+  <a [routerLink]="['/psp/payment-method/subscribed']" routerLinkActive="active" *ngIf="loggedUser.role.roleName === 'ROLE_ADMIN'">
+    <img
+      src="./assets/agency.png"
+      alt="MyHome"
+      class="app-icon" />
   </a>
   <div class="spacer">
+    <div *ngIf="loggedUser && loggedUser.role.roleName === 'ROLE_ADMIN'">
+      &nbsp;&nbsp;
+      <a [routerLink]="['/t/transactions']" routerLinkActive="active" mat-button color="primary">
+        Transactions
+      </a>
+      <a [routerLink]="['/l/logs']" routerLinkActive="active" mat-button color="primary">
+        Logs
+      </a>
+    </div>
+  </div>
     <a
       *ngIf="!loggedUser"
       [routerLink]="['/auth/login']"
@@ -26,5 +45,4 @@
       <div *ngIf="loggedUser" class="temp">
         <button mat-raised-button (click)="logOut()">Log out</button>
       </div>
-  </div>
 </mat-toolbar>

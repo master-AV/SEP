@@ -12,4 +12,5 @@ import lombok.Setter;
 public class MembershipDTO {
     private Long userId;
     private boolean subscription;
+    private String paymentMethod;
 }

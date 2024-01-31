@@ -8,6 +8,7 @@ import lombok.Setter;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -37,6 +38,10 @@ public class User {
     private LocalDateTime expiresMembership;
     @Column(name="yearly_subscription")
     private boolean yearlySubscription;
+    @Column(name="payment_method")
+    private String paymentMethod;
+    @OneToMany(mappedBy="user")
+    private List<Transaction> transactions;
 
     public User(String name, String surname, String email, boolean verified, String password, Role role) {
         this.name = name;

@@ -5,8 +5,9 @@ import ftn.sep.webshop.dto.response.UserResponse;
 import ftn.sep.webshop.exception.*;
 
 import java.io.IOException;
+import java.util.List;
 
-public interface IUserService {
+public interface IUsersService {
     User getVerifiedUser(String email) throws EntityNotFoundException;
     UserResponse create(
             String email,
@@ -19,5 +20,9 @@ public interface IUserService {
     boolean checkIfUserAlreadyExists(String email);
     boolean activate(String verifyId, String securityCode) throws EntityNotFoundException, WrongVerifyTryException;
     User save(User user);
-    void updateMembership(Long userId, boolean subscription) throws EntityNotFoundException;
+    void updateMembership(Long userId, boolean subscription, String paymentMethod) throws EntityNotFoundException;
+    List<UserResponse> getUsersWithExpiredMembership();
+    User getById(Long userId) throws EntityNotFoundException;
+
+    List<UserResponse> getAllWithRoleUser();
 }

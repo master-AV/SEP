@@ -1,6 +1,6 @@
 package com.sep.psp.service.interfaces;
 
-import com.sep.psp.dto.request.PaymentRequest;
+import ftn.sep.dto.request.PaymentRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.net.MalformedURLException;

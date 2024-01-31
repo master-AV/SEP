@@ -36,7 +36,16 @@ const routes: Routes = [
         path: "qr",
         loadChildren: () =>
           import("./../qr-code/qr-code.module").then((m) => m.QrCodeModule),
+      },{
+        path: "t",
+        loadChildren: () => 
+          import("./../transactions/transactions.module").then((m) => m.TransactionsModule)
       },
+      {
+        path: "l",
+        loadChildren: () => 
+          import("./../logs/logs.module").then((m) => m.LogsModule)
+      }
     ]
   },
 ];
