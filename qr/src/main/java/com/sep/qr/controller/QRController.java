@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("qr")
+@RequestMapping("/qr-code")
 @CrossOrigin("http://localhost:4201")
 public class QRController {
 
@@ -28,7 +28,7 @@ public class QRController {
         return new MessageResponse("QR payment response");
     }
 
-    @PostMapping(value = "/req/payment", consumes = "application/json")
+    @PostMapping(value = "/request", consumes = "application/json")
     @CrossOrigin(exposedHeaders = {"Location"})
     public ResponseEntity<?> requestPaymentURL(@RequestBody PaymentUrlDTO dto,
                                                HttpServletResponse response) throws URISyntaxException {

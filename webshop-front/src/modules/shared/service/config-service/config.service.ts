@@ -49,9 +49,9 @@ export class ConfigService {
   QR_URL = `${this.API_URL}/qr`;
 
   ///CC
-  CC_URL = `${this.API_URL}/cc`;
+  CC_URL = `${this.API_URL}/credit-card`;
   //PAY
-  CC_PAY_URL = `${this.API_URL}/cc/pay`;
+  CC_PAY_URL = `${this.API_URL}/credit-card/pay`;
 
   //PSP
   PSP_URL = `${this.API_URL}/payment`;

@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping(value = "/cc")
+@RequestMapping(value = "/credit-card")
 public class CCPaymentController {
 
     @Autowired
     private CCPaymentService paymentService;
 
-    @PostMapping(value = "/req/payment", consumes = "application/json")
+    @PostMapping(value = "/request", consumes = "application/json")
     @CrossOrigin(exposedHeaders = {"Location"})
     public ResponseEntity<?> requestPaymentURL(@RequestBody PaymentUrlDTO dto,
                                                HttpServletResponse response) throws URISyntaxException {

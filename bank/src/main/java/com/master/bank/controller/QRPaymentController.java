@@ -1,5 +1,6 @@
 package com.master.bank.controller;
 
+import ch.qos.logback.core.joran.sanity.Pair;
 import com.master.bank.dto.EndPaymentDTO;
 import com.master.bank.dto.PaymentInfoDTO;
 import com.master.bank.dto.PaymentURLRequestDTO;
@@ -7,7 +8,6 @@ import com.master.bank.dto.QRCardDTO;
 import com.master.bank.service.PaymentService;
 import com.master.bank.service.QRCodeGenerator;
 import jakarta.servlet.http.HttpServletResponse;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;

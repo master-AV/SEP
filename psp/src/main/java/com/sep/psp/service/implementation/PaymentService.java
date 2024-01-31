@@ -79,7 +79,7 @@ public class PaymentService implements IPaymentService {
         double amount = getPriceOfService(Long.valueOf(serviceId));
         System.out.println("Price: " + amount);
         Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
-        return new PaymentUrlDTO(amount, webshop.getMerchantId(), webshop.getMerchantPassword());
+        return null; //new PaymentUrlDTO(amount, webshop.getMerchantId(), webshop.getMerchantPassword());
     }
 
     private double getPriceOfService(Long serviceId) {
@@ -157,21 +157,17 @@ public class PaymentService implements IPaymentService {
             else
                 bitcoinDTO = new BPaymentDTO(paymentDTO, null, null, null, null);
             return restTemplate.postForEntity(url.toURI(), bitcoinDTO, Object.class);
+        } else if (method.equals("CREDIT CARD")) {
+            Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
+            URL url = new URL(apigatewayUrl + "/credit-card/request");
+            System.out.println(url.toString());
+            return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
+        }else if (method.equals("QR CODE")) {
+            Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
+            URL url = new URL(apigatewayUrl + "/qr-code/request");
+            return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
         }
         return null;
-
-//            case "CREDIT CARD":
-//            {
-//                return new ResponseEntity<>(HttpStatus.OK);
-//            }
-//            case "QR CODE":
-//            {
-//                return new ResponseEntity<>(HttpStatus.OK);
-//            }
-//            default: //bitcoin
-//            {
-//                return new ResponseEntity<>(HttpStatus.OK);
-//
     }
 
 }

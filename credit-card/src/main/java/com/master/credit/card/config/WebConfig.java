@@ -11,14 +11,14 @@ public class WebConfig implements WebMvcConfigurer {
     private static final long MAX_AGE_SECS = 3600;
 
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        System.out.println("TU SAM");
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4201","http://localhost:4201")
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(MAX_AGE_SECS);
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        System.out.println("TU SAM");
+//        registry.addMapping("/**")
+//                .allowedOrigins("http://localhost:4201","http://localhost:4201")
+//                .allowedMethods("*")
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(MAX_AGE_SECS);
+//    }
 }

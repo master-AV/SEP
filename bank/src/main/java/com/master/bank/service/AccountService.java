@@ -23,7 +23,8 @@ public class AccountService {
         if (cryptoService.encrypt(cardDTO.getPAN()).equals(account.getPAN()) &&
             cryptoService.encrypt(cardDTO.getSecurityCode()).equals(account.getSecurityCode()) &&
             cryptoService.encrypt(cardDTO.getCardHolderName()).equals(account.getCardHolderName())
-                &&  cryptoService.encrypt(cardDTO.getExpirationDate().toString()).equals(account.getExpirationDate())) return true;
+                &&  cryptoService.encrypt(cardDTO.getExpirationDate().toString()).equals(account.getExpirationDate()))
+            return true;
         return false;
     }
 
