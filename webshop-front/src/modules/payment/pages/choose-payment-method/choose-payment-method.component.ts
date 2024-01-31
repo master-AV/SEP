@@ -14,24 +14,7 @@ export class ChoosePaymentMethodComponent {
   id: number;
   checked: boolean;
 
-  paymentMethods = [
-    {
-      name: 'CREDIT CARD',
-      img: './assets/credit-card.png'
-    },
-    {
-      name: 'QR CODE',
-      img: './assets/qr-code.png'
-    },
-    {
-      name: 'PAYPAL',
-      img: './assets/paypal.png'
-    },
-    {
-      name: 'BITCOIN',
-      img: './assets/bitcoin.png'
-    }
-    ];
+  paymentMethods = [];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -60,7 +43,7 @@ export class ChoosePaymentMethodComponent {
 
   clickOnPayment(methodName: string){
     const paymentRequest: PaymentRequest = {
-      userId: 10,
+      userId: 1,
       offerId: this.id,
       method: methodName,
       subscribedMembership: this.checked

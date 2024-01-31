@@ -107,7 +107,7 @@ public class PaymentService {
         try {
             if (cardDTO instanceof QRCardDTO){
                 String qr = ((QRCardDTO) cardDTO).getMerchantInformation();
-                if (validate(qr, paymentInfo))
+                if (!validate(qr, paymentInfo))
                     throw new NotValidQRCodeException("QR is not valid");
             }
             if (!this.accountService.checkCardInfoValidity(cardDTO))
@@ -141,9 +141,11 @@ public class PaymentService {
             QRMerchantDTO merchantDTO = gson.fromJson(dto, QRMerchantDTO.class);
 
             if (paymentInformation.getAmount() == merchantDTO.getAmount() &&
-                    cryptoService.encrypt(merchantDTO.getRecipientPAN()).equals(paymentInformation.getAccount().getAccount().getPAN())
-                    && cryptoService.encrypt(merchantDTO.getRecipientName()).equals(paymentInformation.getAccount().getAccount().getCardHolderName()))
-                return false;
+                    merchantDTO.getRecipientPAN().equals(paymentInformation.getAccount().getAccount().getPAN()) &&
+                    merchantDTO.getRecipientName().equals(paymentInformation.getAccount().getAccount().getCardHolderName()))
+//                    cryptoService.encrypt(merchantDTO.getRecipientPAN()).equals(paymentInformation.getAccount().getAccount().getPAN())
+//                    && cryptoService.encrypt(merchantDTO.getRecipientName()).equals(paymentInformation.getAccount().getAccount().getCardHolderName()))
+                return true;
         }catch (Exception ex){
             return false;
         }
@@ -242,8 +244,10 @@ public class PaymentService {
 
             //qr
             QRMerchantDTO qrMerchantDTO = new QRMerchantDTO(
-                    cryptoService.decrypt(salesAccount.getAccount().getPAN()),
-                    salesAccount.getAccount().getCardHolderName(), requestDTO.getAmount());
+                    salesAccount.getAccount().getPAN(), salesAccount.getAccount().getCardHolderName(),
+//                    cryptoService.decrypt(salesAccount.getAccount().getPAN()),
+//                    cryptoService.decrypt(salesAccount.getAccount().getCardHolderName()),
+                    requestDTO.getAmount());
 
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(qrMerchantDTO);
