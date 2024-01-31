@@ -22,6 +22,8 @@ export class ChoosePaymentMethodComponent {
       this.checked = params['checked'];
     });
 
+    console.log(this.id);
+
     this.paymentMethodService.getSubscribedPaymentMethods().subscribe(response => {
       this.paymentMethods = response;
     });
@@ -53,6 +55,7 @@ export class ChoosePaymentMethodComponent {
       else if (methodName == "QR CODE")
         this.qrCodePayment(response, paymentRequest.userId)
       else{
+        console.log(response.body.redirectUrl);
         window.location.href = response.body.redirectUrl;
       }
     },

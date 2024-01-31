@@ -23,7 +23,7 @@ public class LogController {
         return logService.getAllLogs();
     }
 
-    @PostMapping
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public void generateLog(@RequestBody LogRequest logRequest){
         logService.generateLog(logRequest.getLogMessage(), logRequest.getLogLevel());

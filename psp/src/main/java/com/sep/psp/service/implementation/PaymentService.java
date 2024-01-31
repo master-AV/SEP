@@ -124,10 +124,10 @@ public class PaymentService implements IPaymentService {
 
     public ResponseEntity<?> payWithChosenMethod(PaymentRequest paymentRequest) throws MalformedURLException, URISyntaxException {
         double price = 0.0;
-        if(paymentRequest.getOfferId() == 0L) {
+        if(paymentRequest.getOfferId() == 1L) {
             price = MEMBERSHIP_PRICE;
         } else {
-            price = 100;//getPriceOfService(paymentRequest.getOfferId());
+            price = 100;
         }
         PaymentDTO paymentDTO = new PaymentDTO(paymentRequest.getUserId(), price);
         ResponseEntity<?> response = callPaymentMethod(paymentRequest.getMethod(), paymentDTO);
@@ -136,13 +136,13 @@ public class PaymentService implements IPaymentService {
             URL url_log = new URL(apigatewayUrl + "/log");
             restTemplate.postForEntity(url_log.toURI(), logRequest, Object.class);
         }
-        if(paymentRequest.getOfferId() == 0L && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)){
-            TransactionRequest transactionRequest = new TransactionRequest(LocalDateTime.now(), paymentRequest.getOfferId(), paymentRequest.getMethod(), paymentRequest.getUserId());
-            URL url_transaction = new URL(apigatewayUrl + "/users/transaction");
-            restTemplate.postForEntity(url_transaction.toURI(), transactionRequest, Object.class);
+        TransactionRequest transactionRequest = new TransactionRequest(LocalDateTime.now(), paymentRequest.getOfferId(), paymentRequest.getMethod(), paymentRequest.getUserId());
+        URL url_transaction = new URL(apigatewayUrl + "/transactions");
+        restTemplate.postForEntity(url_transaction.toURI(), transactionRequest, Object.class);
+        if(paymentRequest.getOfferId() == 1L && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)){
             URL url_membership = new URL(apigatewayUrl + "/users/membership");
             MembershipDTO membershipDTO = new MembershipDTO(paymentRequest.getUserId(), paymentRequest.isSubscribedMembership());
-            return restTemplate.postForEntity(url_membership.toURI(), membershipDTO, Object.class);
+            restTemplate.postForEntity(url_membership.toURI(), membershipDTO, Object.class);
         }
 
         return response;
@@ -152,12 +152,11 @@ public class PaymentService implements IPaymentService {
     private WalletInformationRepository walletInformationRepository;
     private ResponseEntity<?> callPaymentMethod(String method, PaymentDTO paymentDTO) throws MalformedURLException, URISyntaxException {
 
-        //OVDE TREBA DA BUDE SWITCH, za svaku metodu placanja, treba pozivati slicno
         if(method.equals("PAYPAL")){
-            URL url = new URL(apigatewayUrl + "/paypal");
+            URL url = new URL("http://localhost:8083/paypal");
             return restTemplate.postForEntity(url.toURI(), paymentDTO, Object.class);
         } else if (method.equals("BITCOIN")){
-            URL url = new URL("http://localhost:8084" + "/bitcoin");
+            URL url = new URL("http://localhost:8084/bitcoin");
             Webshop webshop = webshopRepository.findById(2L).orElseThrow(()-> new NotFoundException());
             WalletInformation walletInformation = walletInformationRepository.findByUserId(paymentDTO.getUserId()).orElse(null);
             BPaymentDTO bitcoinDTO = null;
@@ -170,12 +169,11 @@ public class PaymentService implements IPaymentService {
             return restTemplate.postForEntity(url.toURI(), bitcoinDTO, Object.class);
         } else if (method.equals("CREDIT CARD")) {
             Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
-            URL url = new URL( "http://localhost:8999"+ "/credit-card/request");
-            System.out.println(url.toString());
+            URL url = new URL( "http://localhost:8999/credit-card/request");
             return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
         }else if (method.equals("QR CODE")) {
             Webshop webshop = encryptionService.decryptWebshop(webshopRepository.findByMerchantId(cryptoService.encrypt("1")));
-            URL url = new URL("http://localhost:8085" + "/qr-code/request");
+            URL url = new URL("http://localhost:8085/qr-code/request");
             return restTemplate.postForEntity(url.toURI(), new PaymentUrlDTO(paymentDTO, webshop.getMerchantId(), webshop.getMerchantPassword()), Object.class);
         }
         return null;

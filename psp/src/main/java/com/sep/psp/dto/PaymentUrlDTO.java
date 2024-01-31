@@ -1,6 +1,5 @@
 package com.sep.psp.dto;
 
-import com.sep.psp.dto.request.PaymentRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

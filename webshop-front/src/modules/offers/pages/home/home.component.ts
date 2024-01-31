@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   }
 
   payFee(){
-    this.router.navigate([`/psp/payment/payment-method/0/${this.isCheckedSubscription}`]);
+    this.router.navigate([`/psp/payment/payment-method/1/${this.isCheckedSubscription}`]);
   }
 
 }

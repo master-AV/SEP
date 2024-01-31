@@ -1,6 +1,7 @@
 spring:
   main:
     allow-bean-definition-overriding: true
+    web-application-type: reactive
   application:
     name: gateway-service
   logging:
@@ -51,6 +52,10 @@ spring:
           uri: http://localhost:8081/
           predicates:
             - Path=/transactions/**
+        - id: web-log
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/log/**
         - id: auth-service
           uri: http://localhost:8092 #lb://id-service
           predicates:
@@ -68,8 +73,7 @@ spring:
           predicates:
             - Path=/credit-card/**
         - id: qr-code
-          uri: http://localhost:8085/ #lb://psp
-          #localhost:8443/
+          uri: http://localhost:8085/
           predicates:
             - Path=/qr-code/**
 
@@ -86,7 +90,7 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/web-shop-db
     username: postgres
-    password: ftn
+    password: admin
   sql.init:
     platform: postgres
     mode: always

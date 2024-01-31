@@ -17,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import static com.sep.id.utils.ErrorMessageConstants.WRONG_VERIFY_HASH;
 
@@ -29,7 +31,7 @@ public class AuthController {
 
     @PostMapping(path="/login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponse login(@Valid @RequestBody final LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) throws UserLockedException, InvalidCredsException, EntityNotFoundException {
+    public LoginResponse login(@Valid @RequestBody final LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) throws UserLockedException, InvalidCredsException, EntityNotFoundException, MalformedURLException, URISyntaxException {
         return authService.login(loginRequest.getEmail(), loginRequest.getPassword(), request, response);
     }
 
