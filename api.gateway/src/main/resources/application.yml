@@ -15,7 +15,7 @@ spring:
           '[/**]':
             allowedOrigins:
               - "http://localhost:4200"
-              - "http://localhost:4201"
+#              - "http://localhost:4201"
             allowedMethods:
               - GET
               - POST
@@ -24,6 +24,7 @@ spring:
               - '*'
             exposedHeaders:
               - 'Authorization'
+              - 'Location'
             allowCredentials: true
       discovery:
         locator:

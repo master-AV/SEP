@@ -32,6 +32,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./../blockchain/blockchain.module").then((m) => m.BlockchainModule),
       },
+      {
+        path: "qr",
+        loadChildren: () =>
+          import("./../qr-code/qr-code.module").then((m) => m.QrCodeModule),
+      },
     ]
   },
 ];

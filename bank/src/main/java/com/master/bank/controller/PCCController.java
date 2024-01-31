@@ -4,11 +4,9 @@ import com.master.bank.dto.EndPaymentDTO;
 import com.master.bank.dto.PccRequestDTO;
 import com.master.bank.dto.PccResponseDTO;
 import com.master.bank.service.PaymentService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

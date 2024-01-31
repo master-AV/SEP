@@ -1,12 +1,7 @@
 package com.master.bank.controller;
 
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.WriterException;
 import com.master.bank.dto.*;
 import com.master.bank.service.PaymentService;
-import com.master.bank.service.QRCodeGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

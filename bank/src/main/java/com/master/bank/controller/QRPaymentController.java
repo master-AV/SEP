@@ -6,7 +6,6 @@ import com.master.bank.dto.PaymentInfoDTO;
 import com.master.bank.dto.PaymentURLRequestDTO;
 import com.master.bank.dto.QRCardDTO;
 import com.master.bank.service.PaymentService;
-import com.master.bank.service.QRCodeGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -15,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/bank")
@@ -31,11 +32,11 @@ public class QRPaymentController {
                                               HttpServletResponse response){
         try {
             System.out.println("Bank - controller - request payment - QR");
-            Pair<PaymentInfoDTO, String> infoPair = paymentService.requestPaymentQR(requestDTO);
-            PaymentInfoDTO info = infoPair.a;
+            Map<String, Object> infoPair = paymentService.requestPaymentQR(requestDTO);
+            PaymentInfoDTO info = (PaymentInfoDTO) infoPair.get("PaymentInfoDTO");
             response.addHeader("PaymentUrl", info.getPaymentUrl());
             response.addHeader("PaymentId", info.getPaymentId());
-            return ResponseEntity.ok(infoPair.b);
+            return ResponseEntity.ok(infoPair.get("QRCode"));
         }catch (Exception ex){
             response.addHeader("ErrorUrl", environment.getProperty("bank.url.error"));
             return ResponseEntity.ok("");

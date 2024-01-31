@@ -51,7 +51,8 @@ export class ConfigService {
   ///CC
   CC_URL = `${this.API_URL}/credit-card`;
   //PAY
-  CC_PAY_URL = `${this.API_URL}/credit-card/pay`;
+  // CC_PAY_URL = `${this.API_URL}/credit-card/pay`;
+  CC_PAY_URL = `http://localhost:8999/credit-card/pay`;
 
   //PSP
   PSP_URL = `${this.API_URL}/payment`;

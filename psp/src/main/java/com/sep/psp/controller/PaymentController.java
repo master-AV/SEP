@@ -24,6 +24,7 @@ public class PaymentController {
     private AccountInformationService accountInformationService;
 
     @PostMapping
+//    @CrossOrigin(exposedHeaders = {"Location"})
     public ResponseEntity<?> payWithChosenMethod(@RequestBody PaymentRequest paymentRequest) throws MalformedURLException, URISyntaxException {
 
         return paymentService.payWithChosenMethod(paymentRequest);
@@ -49,20 +50,20 @@ public class PaymentController {
 //        return paymentService.startRequestForQR(serviceId);
 //    }
 
-//    @PostMapping(value = "/qr/pay/{userId}/{paymentId}")
-//    @CrossOrigin(exposedHeaders = {"Location"})
-//    public ResponseEntity<?> startPaymentWithQR(@PathVariable int userId, @PathVariable String paymentId,
-//                                                @RequestBody String merchantInformation){
-//        System.out.println("Pay with QR");
-//        try {
-//            return paymentService.startPaymentForQR(userId, paymentId, merchantInformation);
-//        }catch (EntityNotFoundException e){
-//            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @PostMapping(value = "/qr/pay/{userId}/{paymentId}")
+    //@CrossOrigin(exposedHeaders = {"Location"})
+    public ResponseEntity<?> startPaymentWithQR(@PathVariable int userId, @PathVariable String paymentId,
+                                                @RequestBody String merchantInformation){
+        System.out.println("Pay with QR");
+        try {
+            return paymentService.startPaymentForQR(userId, paymentId, merchantInformation);
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping(value = "/qr/save/{userId}")
-    @CrossOrigin(exposedHeaders = {"Location"})
+    //@CrossOrigin(exposedHeaders = {"Location"})
     public ResponseEntity<?> saveAccountInformation(@PathVariable int userId, @RequestBody CardDTO cardDTO){
         System.out.println("Pay with QR");
         try {

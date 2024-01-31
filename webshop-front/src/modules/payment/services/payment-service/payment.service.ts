@@ -11,7 +11,8 @@ export class PaymentService {
   constructor(private http: HttpClient, private configService: ConfigService) {}
 
   payment(paymentRequest: PaymentRequest) {
-    return this.http.post<any>(this.configService.PSP_URL, paymentRequest, {observe: 'response'});
+    return this.http.post<any>(this.configService.PSP_URL, paymentRequest,
+      {observe: 'response'});
 
   }
 }

@@ -27,6 +27,7 @@ export class CreditCardService {
     //     'Origin': 'http://localhost:4201' // Your front-end URL})
     //   }
     // })
-    return this.httpClient.post<any>(this.configService.CC_PAY_URL, cc);
+    return this.httpClient.post<any>(this.configService.CC_PAY_URL, cc, {observe: 'response'
+      });
   }
 }
