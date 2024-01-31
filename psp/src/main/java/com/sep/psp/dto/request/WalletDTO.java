@@ -1,5 +1,4 @@
-package ftn.sep.dto;
-
+package com.sep.psp.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDTO {
-
-    protected Long userId;
-    protected double price;
+public class WalletDTO {
+    private long userId;
+    private String accountId;
+    private String accountKey;
 }

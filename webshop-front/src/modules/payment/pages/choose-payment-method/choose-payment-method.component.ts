@@ -44,7 +44,7 @@ export class ChoosePaymentMethodComponent {
   clickOnPayment(methodName: string){
     const paymentRequest: PaymentRequest = {
       userId: 1,
-      offerId: this.id,      
+      offerId: this.id,
       method: methodName,
       subscribedMembership: this.checked
     };

@@ -1,0 +1,12 @@
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>Account id</mat-label>
+    <input [formControl]="accountId" matInput placeholder="123456789" type="text">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="example-full-width">
+    <mat-label>Account key</mat-label>
+    <input [formControl]="accountKey" matInput placeholder="Petar Petrović" type="text">
+  </mat-form-field>
+  <button (click)="submit()"> Add </button>
+</form>

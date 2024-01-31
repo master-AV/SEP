@@ -27,6 +27,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./../credit-card/credit-card.module").then((m) => m.CreditCardModule),
       },
+      {
+        path: "blockchain",
+        loadChildren: () =>
+          import("./../blockchain/blockchain.module").then((m) => m.BlockchainModule),
+      },
     ]
   },
 ];

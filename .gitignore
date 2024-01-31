@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,webstorm,visualstudiocode,angular,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,webstorm,visualstudiocode,angular,java
 
+*/target/*
+*/package-lock.json
+
 ### Angular ###
 ## Angular ##
 # compiled output
